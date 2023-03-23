@@ -229,4 +229,3 @@ while True:
     Valentin.RfidChecker()
 
     sleep_ms(10)
-
