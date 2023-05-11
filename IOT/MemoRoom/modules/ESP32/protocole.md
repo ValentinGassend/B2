@@ -1,0 +1,6 @@
+appuie sur bouton pendant 5s → led verte pendant 2s
+détection RFID → activation BLE → récupération des données → led verte 2s + son
+
+activation de la led "non parlé" → TTS → whisper → activation led "parlé" + désactivation led "non parlé" → await 30s → désactivation led "parlé" + activation led "non parlé"  → TTS → whisper  → activation led "parlé" + désactivation led "non parlé" → await 30s → désactivation led "parlé" + activation led "non parlé"  → TTS → whisper  → activation led "parlé" + désactivation led "non parlé" → await 30s → désactivation led "parlé" + activation led "non parlé"  → TTS → whisper → activation led "parlé" + désactivation led "non parlé" → await 30s → désactivation led "parlé" + activation led "non parlé"  → TTS→ whisper → activation led "parlé" + désactivation led "non parlé" → await 30s → désactivation led "parlé" + activation led "non parlé"  → TTS → whisper → activation led "parlé" + désactivation led "non parlé" → await 30s → désactivation led "parlé" + activation led "non parlé"
+
+bandeau led fade-in fade-out + toutes les 5 minutes signal sonore → appuie sur bouton → lumière statique verte + son activation → TTS → whisper → activation led "parlé" + désactivation led "non parlé" → await 30s → éteindre
