@@ -2,7 +2,6 @@ import subprocess
 
 class TTS:
     def __init__(self):
-        subprocess.Popen("sudo modprobe snd_bcm2835", shell=True)
         self.talkSubprocess = None
         pass
 
@@ -19,3 +18,4 @@ class TTS:
     def kill(self):
         if self.talkSubprocess:
             self.talkSubprocess.terminate()
+            self.talkSubprocess.kill()

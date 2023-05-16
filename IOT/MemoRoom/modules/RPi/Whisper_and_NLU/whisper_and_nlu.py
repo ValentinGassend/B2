@@ -9,7 +9,10 @@ class Manager_NLU_Whisper:
     def __init__(self):
         self.startTime = time()
         self.transcription = Whisper()
+        print("whisper started")
         self.traductor = Nlu()
+        # self.traductor.fit()
+        print("NLU fit ended")
         self.traducted = False
         self.priseRDV = False
         self.text = ""
@@ -26,23 +29,23 @@ class Manager_NLU_Whisper:
 
     def start_recording(self):
         # supposé marche si j'arrive a shutdown le terminal
-        # self.transcription.lunch()
+        self.transcription.lunch()
         #
         #
         # Subtitution :
-        f = open(self.file, "w+")
-        f.write(
-            # "Je souhaite prendre un rendez-vous chez le médecin pour le 20 juin à 15h"
-            # "programme moi un diner pour demain 14h30."
-            # "Je veux prendre un rendez-vous d'affaires avec le responsable des ventes le 28 juin à 14h00 au bureau de l'entreprise."
-            "Je voudrais prendre un rendez-vous médical avec le Dr. Martin le 4 juillet prochain."
-        )
-        f.close()
+        # f = open(self.file, "w+")
+        # f.write(
+        #     # "Je souhaite prendre un rendez-vous chez le médecin pour le 20 juin à 15h"
+        #     # "programme moi un diner pour demain 14h30."
+        #     # "Je veux prendre un rendez-vous d'affaires avec le responsable des ventes le 28 juin à 14h00 au bureau de l'entreprise."
+        #     "Je voudrais prendre un rendez-vous médical avec le Dr. Martin le 4 juillet prochain."
+        # )
+        # f.close()
 
     def stop_recording(self):
         # supposé marche si j'arrive a shutdown le terminal
-        # self.transcription.stop()
-
+        self.transcription.stop()
+        
         pass
 
     def start_understanding(self):
@@ -50,7 +53,6 @@ class Manager_NLU_Whisper:
         if (self.actualTime-self.startTime > 30):
             if not self.traducted:
                 # self.transcription.stop()
-                print("stopped")
                 data = self.traductor.run(self.file)
                 self.traducted = True
         else:
@@ -61,17 +63,19 @@ class Manager_NLU_Whisper:
 newStartTime = None
 stopped = False
 neverplayed = True
+myTest = Manager_NLU_Whisper()
+
 while True:
     actualTime = time()
     if neverplayed:
-        myTest = Manager_NLU_Whisper()
-        neverplayed = False
+        
         myTest.start_recording()
 
         startTime = time()
+        neverplayed = False
         print("end of first loop")
     else:
-        if (actualTime-startTime > 30):
+        if (actualTime-startTime > 60):
             if not stopped:
                 myTest.stop_recording()
                 newStartTime = time()

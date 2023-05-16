@@ -35,7 +35,7 @@ while True:
                 delay = time() - dataSenderStarter
                 if delay > 2:
                     content = MyFileManager.read()
-                    Myled.on_green()
+#                     Myled.on_green()
                     MyRFID_BLE_manager.send(content)
                     MyFileManager.reset()
                     dataSended=True
@@ -61,8 +61,7 @@ while True:
         ledTimerStarter = time()
     else :
 #         temps de led active
-        if (time()-ledTimerStarter)>2:
-
+        if (time()-ledTimerStarter)>1:
             Myled.off() 
 
  
