@@ -68,7 +68,6 @@ def transcribe():
     with sr.Microphone(sample_rate=16000) as source:
 
         print("Let's get the talking going!")
-
         while True:
 
             # record audio stream into wav
@@ -79,11 +78,8 @@ def transcribe():
 
             audio_clip = AudioSegment.from_file(data)
 
-            audio_clip.export(save_path, format="wav")
-
             print("before transcribe")
-            result = audio_model.transcribe(
-                save_path)
+            result = audio_model.transcribe(save_path)
 
             for segment in result:
                 print(segment.text)

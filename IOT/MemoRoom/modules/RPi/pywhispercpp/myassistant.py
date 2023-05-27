@@ -44,10 +44,10 @@ class MyAssistant:
     """
 
     def __init__(self,
-                 model='tiny',
+                 model='base',
                  input_device: int = None,
                  silence_threshold: int = 8,
-                 q_threshold: int = 16,
+                 q_threshold: int = 6,
                  block_duration: int = 30,
                  commands_callback: Callable[[str], None] = None,
                  model_log_level: int = logging.INFO,
@@ -90,6 +90,7 @@ class MyAssistant:
         """
         This is called (from a separate thread) for each audio block.
         """
+        print("_audio_callback")
         if status:
             logging.warning(F"underlying audio stack warning:{status}")
 
@@ -122,10 +123,12 @@ class MyAssistant:
         # running the inference
         self.pwccp_model.transcribe(audio_data,
                                     new_segment_callback=self._new_segment_callback)
+        print(self.q.qsize())
 
     def _new_segment_callback(self, seg):
         if self.commands_callback:
             self.commands_callback(seg[0].text)
+            print("output printed")
 
     def start(self) -> None:
         """
@@ -159,7 +162,7 @@ def _main():
                         type=str, help="Whisper.cpp model, default to %(default)s")
     parser.add_argument('-ind', '--input_device', type=int, default=None,
                         help=f'Id of The input device (aka microphone)\n'
-                             f'available devices {Assistant.available_devices()}')
+                             f'available devices {MyAssistant.available_devices()}')
     parser.add_argument('-st', '--silence_threshold', default=16,
                         help=f"he duration of silence after which the inference will be running, default to %(default)s")
     parser.add_argument('-bd', '--block_duration', default=30,
@@ -167,10 +170,11 @@ def _main():
 
     args = parser.parse_args()
 
-    my_assistant = Assistant(model=args.model,
+    my_assistant = MyAssistant(model=args.model,
                              input_device=args.input_device,
                              silence_threshold=args.silence_threshold,
                              block_duration=args.block_duration,
+                             n_threads=args.n_threads,
                              commands_callback=print)
     my_assistant.start()
 
