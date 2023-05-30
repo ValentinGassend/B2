@@ -6,6 +6,10 @@ A simple example showcasing the use of `pywhispercpp` as an assistant.
 The idea is to use a `VAD` to detect speech (in this example we used webrtcvad), and when speech is detected
 we run the inference.
 """
+
+import pywhispercpp.constants as constants
+
+
 import argparse
 import importlib.metadata
 import queue
@@ -13,9 +17,9 @@ import time
 from typing import Callable
 import numpy as np
 import sounddevice as sd
-import pywhispercpp.constants as constants
 import webrtcvad
 import logging
+import signal
 from pywhispercpp._logger import set_log_level
 from pywhispercpp.model import Model
 
@@ -147,7 +151,7 @@ class MyAssistant:
                 while self.running:  # Loop while the running flag is True
                     time.sleep(0.1)
             except KeyboardInterrupt:
-                logging.info("Assistant stopped")
+                self.close()  # Call the close method when KeyboardInterrupt is raised
 
     def close(self):
         """
@@ -176,11 +180,20 @@ def _main():
 
     args = parser.parse_args()
 
+    def commands_callback(command):
+        print(f"Received command: {command}")
+
     my_assistant = MyAssistant(model=args.model,
                                input_device=args.input_device,
                                silence_threshold=args.silence_threshold,
                                block_duration=args.block_duration,
-                               commands_callback=print)
+                               commands_callback=commands_callback)
+
+    def signal_handler(sig, frame):
+        my_assistant.close()  # Call the close method when the signal is received
+
+    signal.signal(signal.SIGINT, signal_handler)  # Register the signal handler
+
     my_assistant.start()
 
 

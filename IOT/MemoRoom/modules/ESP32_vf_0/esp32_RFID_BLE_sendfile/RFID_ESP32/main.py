@@ -24,12 +24,7 @@ class RFID :
             (stat, raw_uid) = self.rdr.anticoll()
             if stat == self.rdr.OK:
                 print("\nBadge détecté !")
-                if raw_uid == [163, 230, 27, 172, 242]:
-                    print("\nBadge reconnu")
-                    
-                    return True
-                else:
-                    print("\nBadge non reconnu")
-                    print("\nVoici l'UID du badge : " + str(raw_uid))
-                    return False
+                return True
+            else:
+                return False
         return False

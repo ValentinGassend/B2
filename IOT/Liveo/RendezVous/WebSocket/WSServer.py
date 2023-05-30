@@ -30,7 +30,7 @@ class WSServer:
                     print("Nouvelle connexion client :", client_address)
                     client_socket.setblocking(0)
                     self.clients.append(client_socket)
-                    self.send_to_all_clients("ID")
+                    self.send_to_all_clients("Who are you ?")
                 else:
                     # Données reçues d'un client existant
                     try:

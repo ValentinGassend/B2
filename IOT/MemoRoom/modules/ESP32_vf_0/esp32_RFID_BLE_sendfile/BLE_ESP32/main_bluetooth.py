@@ -8,7 +8,6 @@ from micropython import const
 
 class Ble(BLESimplePeripheral):
     def on_rx(self,v):
-        print("RX", v)
-
+        print("RX", v.decode())
 # p.is_connected()
 # p.send(data)
