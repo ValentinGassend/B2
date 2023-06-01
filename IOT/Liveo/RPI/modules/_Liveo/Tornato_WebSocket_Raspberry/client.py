@@ -43,7 +43,8 @@ class TornadoWebsocketClient:
         self.send('ESP')
 
     def run (self):
-        message = self.conn.read_message()
+        
+        message = asyncio.run(self.conn.read_message())
         if not str(message) == self.prev_message :
             print("Message recieved : " + str(message))
         self.prev_message = str(message)

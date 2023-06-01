@@ -1,61 +1,23 @@
-
-
+# Importations
+from rfid_and_BLE.BLE_luncher.better_ble import Ble
+from rfid_and_BLE.rfid_RPI.better_rfid import RfidTrigger, RFIDAlertManager, rfid_trouble, check_rfid_is_ready
 
 class Rfid_BLE_manager:
     def __init__(self, numDevice=1):
-        from rfid_and_BLE.BLE_luncher.better_ble import Ble, BLEAlertManager, bleTrouble, checkBLEIsReady
-        from rfid_and_BLE.rfid_RPI.better_rfid import Rfid_Trigger, RFIDAlertManager, rfidTrouble, checkRFIDIsReady
-        RFIDAlertManager = RFIDAlertManager(rfidTrouble)             
-        self.rfid = Rfid_Trigger(RFIDAlertManager, numDevice)
-        self.myBle = Ble(BLEAlertManager)
+        self.RFIDAlertManager = RFIDAlertManager(rfid_trouble)
+        self.rfid = RfidTrigger(self.RFIDAlertManager, numDevice)
+        self.myBle = Ble()
         myrfidObj = self.rfid
-        print("Testing RFID detection :")
-        self.rfidIsReady = checkRFIDIsReady(myrfidObj, 5)
-        if not self.rfidIsReady:
-            print("RFID IS NOT READY")
+        print("Testing RFID detection:")
         
     def lunch(self):
-        self.rfid.read()
         if self.rfid.read() and not self.myBle.lunch():
-                self.myBle.lunch()
+            self.myBle.lunch()
         if not self.rfid.read():
-             self.myBle.write_data()
+            # Appelle la méthode appropriée pour écrire les données BLE
+            self.myBle.write_data()
 
     def checkResult(self):
+        # Vérifie l'état actuel du RFID et met à jour self.rfidIsReady
+        self.rfidIsReady = check_rfid_is_ready(self.rfid, 5)
         return self.rfidIsReady
-
-
-
-
-
-
-# MyManager = Rfid_BLE_manager()
-
-
-# __________________________ #
-# __________________________ #
-
-
-# bleAlertManager = BLEAlertManager(bleTrouble)
-# myBleObj = Ble(bleAlertManager)
-
-
-# print("Testing BLE connection:")
-# bleIsReady = checkBLEIsReady(myBleObj, 5)
-
-
-# RFIDAlertManager = RFIDAlertManager(rfidTrouble)
-# myrfidObj = Rfid_Trigger(RFIDAlertManager)
-
-
-# print("Testing RFID detection :")
-# rfidIsReady = checkRFIDIsReady(myrfidObj, 5)
-
-
-# __________________________ #
-# __________________________ #
-
-
-# while True:
-#     MyManager.lunch()
-# 

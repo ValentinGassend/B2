@@ -21,8 +21,12 @@ class Rfid_BLE_manager:
         if not self.rfid.read():
              self.myBle.write_data()
 
+    def checkRFIDDetection(self):
+        return self.rfid.read()
+    
     def checkResult(self):
-        return self.rfidIsReady
+         return True
+        # return self.rfidIsReady
 
 
 

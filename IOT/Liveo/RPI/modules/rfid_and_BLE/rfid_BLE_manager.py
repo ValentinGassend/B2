@@ -20,20 +20,20 @@ MyManager = Rfid_BLE_manager()
 # __________________________ #
 
 
-bleAlertManager = BLEAlertManager(bleTrouble)
-myBleObj = Ble(bleAlertManager)
+# bleAlertManager = BLEAlertManager(bleTrouble)
+# myBleObj = Ble(bleAlertManager)
 
 
 print("Testing BLE connection:")
-bleIsReady = checkBLEIsReady(myBleObj, 5)
+# bleIsReady = checkBLEIsReady(myBleObj, 5)
 
 
-RFIDAlertManager = RFIDAlertManager(rfidTrouble)
-myrfidObj = Rfid_Trigger(RFIDAlertManager)
+# RFIDAlertManager = RFIDAlertManager(rfidTrouble)
+# myrfidObj = Rfid_Trigger(RFIDAlertManager)
 
 
 print("Testing RFID detection :")
-rfidIsReady = checkRFIDIsReady(myrfidObj, 5)
+# rfidIsReady = checkRFIDIsReady(myrfidObj, 5)
 
 
 # __________________________ #

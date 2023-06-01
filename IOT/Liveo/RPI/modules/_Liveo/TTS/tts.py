@@ -1,21 +1,41 @@
-import subprocess
+from gtts import gTTS
+from pygame import mixer
+
 
 class TTS:
     def __init__(self):
-        self.talkSubprocess = None
-        pass
+        mixer.init()
 
     def talk(self, content):
-        if not type(content)==type(""):
+        if not isinstance(content, str):
             content = str(content)
-        self.talkSubprocess = subprocess.Popen("espeak -v mb-fr4 '"+content+"'", shell=True)
+
+        tts = gTTS(content, lang='fr')
+        audio_file = "output.mp3"
+        tts.save(audio_file)
+
+        mixer.music.load(audio_file)
+        mixer.music.play()
 
     def sound(self, file):
-        if not type(file)==type(""):
-            file = str(file)
-        subprocess.Popen("aplay '"+file+"'", shell=True)
-    
+        # Playback of audio files is not implemented in this version
+        raise NotImplementedError(
+            "The 'sound' function is not implemented with the gTTS library.")
+
     def kill(self):
-        if self.talkSubprocess:
-            self.talkSubprocess.terminate()
-            self.talkSubprocess.kill()
+        mixer.music.stop()
+
+
+# Create an instance of the TTS class
+tts = TTS()
+
+# Use the talk() method to convert text to speech
+text = "Bonjour, comment ça va ?"
+tts.talk(text)
+
+# Wait for the speech to finish
+while mixer.music.get_busy():
+    pass
+
+# Clean up resources
+tts.kill()
