@@ -1,18 +1,14 @@
-def run_assistant():
-    # Créez une instance de l'assistant
-    assistant = MyAssistant()
+from myassistant import MyAssistant
 
-    # Démarrez l'assistant
-    assistant.start()
+def MyCustomFunction(data):
+    print("passed by My Custom Function "+data)
+    my_assistant.close()
+my_assistant = MyAssistant(model='medium', commands_callback=MyCustomFunction,
+                           n_threads=12, input_device=0, q_threshold=4)
 
-    # Attendez un retour
-    time.sleep(5)
 
-    # Arrêtez l'assistant
-    assistant.close()
+# print(Assistant.available_devices)
+my_assistant.start()
 
-    # Attendez 5 secondes
-    time.sleep(5)
-
-    # Redémarrez l'assistant
-    assistant.start()
+while True:
+    pass

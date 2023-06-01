@@ -48,7 +48,7 @@ class MyAssistant:
     """
 
     def __init__(self,
-                 model='tiny',
+                 model='medium',
                  input_device: int = None,
                  silence_threshold: int = 8,
                  q_threshold: int = 16,
@@ -168,7 +168,7 @@ class MyAssistant:
 def _main():
     parser = argparse.ArgumentParser(description="", allow_abbrev=True)
     # Positional args
-    parser.add_argument('-m', '--model', default='tiny.en',
+    parser.add_argument('-m', '--model', default='medium',
                         type=str, help="Whisper.cpp model, default to %(default)s")
     parser.add_argument('-ind', '--input_device', type=int, default=None,
                         help=f'Id of The input device (aka microphone)\n'
