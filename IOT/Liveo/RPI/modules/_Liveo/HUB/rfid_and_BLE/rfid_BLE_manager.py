@@ -1,33 +1,28 @@
 
 
-
 class Rfid_BLE_manager:
     def __init__(self, numDevice=1):
         from rfid_and_BLE.BLE_luncher.better_ble import Ble, BLEAlertManager, bleTrouble, checkBLEIsReady
         from rfid_and_BLE.rfid_RPI.better_rfid import Rfid_Trigger, RFIDAlertManager, rfidTrouble, checkRFIDIsReady
-        RFIDAlertManager = RFIDAlertManager(rfidTrouble)             
+        RFIDAlertManager = RFIDAlertManager(rfidTrouble)
         self.rfid = Rfid_Trigger(RFIDAlertManager, numDevice)
         self.myBle = Ble(BLEAlertManager)
         myrfidObj = self.rfid
         print("Testing RFID detection :")
-        self.rfidIsReady = checkRFIDIsReady(myrfidObj, 5)
+        self.rfidIsReady = checkRFIDIsReady(myrfidObj, 25)
         if not self.rfidIsReady:
             print("RFID IS NOT READY")
-        
+
     def lunch(self):
         if self.checkRFIDDetection():
-                self.myBle.lunch()
+            self.myBle.lunch()
 
     def checkRFIDDetection(self):
         return self.rfid.read()
-    
+
     def checkResult(self):
-         return True
+        return True
         # return self.rfidIsReady
-
-
-
-
 
 
 # MyManager = Rfid_BLE_manager()
@@ -59,4 +54,4 @@ class Rfid_BLE_manager:
 
 # while True:
 #     MyManager.lunch()
-# 
+#

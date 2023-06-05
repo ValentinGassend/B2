@@ -1,6 +1,7 @@
 import tornado.websocket
 import asyncio
 import logging
+import RPi.GPIO as GPIO
 from time import sleep
 
 
@@ -40,7 +41,7 @@ class TornadoWebsocketClient:
 
     async def _TryConnection(self):
         self.conn = await tornado.websocket.websocket_connect('ws://192.168.1.16:'+str(self.port)+'/chatsocket')
-        self.send('ESP')
+        self.send('RPI')
 
     def run (self):
         

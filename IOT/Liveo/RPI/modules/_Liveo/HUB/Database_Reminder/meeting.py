@@ -36,25 +36,32 @@ class Meeting:
             json.dump(file_data, f, indent=2)
 
 
-    def check_current_date(self):
-        current_date = datetime.now().strftime("%Y-%m-%d")
-        current_time = datetime.now().strftime("%H:%M")
+    def check_current_date(self ):
+        current_date = datetime.now().date()
+        current_time = datetime.now().time()
+
         with open(self.filename, 'r') as file:
             file_data = json.load(file)
             rendezvous = file_data["rendezvous"]
             for rdv in rendezvous:
-                rappel_date = datetime.datetime.strptime(rdv["rappel"]["date"], "%Y-%m-%d").date()
-                rappel_heure = datetime.datetime.strptime(rdv["rappel"]["heure"], "%H:%M").time()
-                rdv_date = datetime.datetime.strptime(rdv["date"], "%Y-%m-%d").date()
-                rdv_heure = datetime.datetime.strptime(rdv["heure"], "%H:%M").time()
-                
-                # Vérifier si l'heure est entre l'heure de rappel et l'heure de rendez-vous
-                if rappel_heure <= current_time <= rdv_heure and rappel_date == current_date:
-                    # # Le rappel est déclenché
-                    # print("Il y a un rendez-vous aujourd'hui :")
-                    # print("Date : ", rdv["date"])
-                    # print("Heure : ", rdv["heure"])
-                    # print("Lieu : ", rdv["lieu"])
-                    # print("Titre : ", rdv["titre"])
-                    # print("Informations supplémentaires : ", rdv["informations_supplementaires"])
+                # ...
+                rappel_date_str = rdv["rappel"]["date"]
+                rappel_heure_str = rdv["rappel"]["heure"]
+                rdv_date_str = rdv["date"]
+                rdv_heure_str = rdv["heure"]
+
+                rappel_date = datetime.strptime(rappel_date_str, "%Y-%m-%d").date() if rappel_date_str else None
+                rappel_heure = datetime.strptime(rappel_heure_str, "%H:%M").time() if rappel_heure_str else None
+                rdv_date = datetime.strptime(rdv_date_str, "%Y-%m-%d").date() if rdv_date_str else None
+                rdv_heure = datetime.strptime(rdv_heure_str, "%H:%M").time() if rdv_heure_str else None
+
+                if rappel_heure and rappel_date and rdv_heure and rdv_date:
+                    if rappel_heure <= current_time <= rdv_heure and rappel_date == rdv_date == current_date:
+                        print("Rappel pour le rendez-vous:", rdv["titre"])
+                        return True
+
+                elif rdv_date and rdv_date == current_date:
+                    print("Rendez-vous aujourd'hui:", rdv["titre"])
                     return True
+
+        return False

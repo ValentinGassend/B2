@@ -1,30 +1,29 @@
 import socket
 import select
-from flask import Flask, render_template, request
 from datetime import datetime, timezone, timedelta
+
 
 class WSServer:
     def __init__(self, address, port):
         self.server_address = address
         self.server_port = port
-        self.app = Flask(__name__)
         self.received_messages = []
+        self.clients = []
 
-        @self.app.route('/')
-        def index():
-            current_time = datetime.now(timezone(timedelta(hours=2)))  # Adjust the timezone offset as per France
-            formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')
-            return render_template('index.html', current_time=formatted_time)
+        # @self.app.route('/')
+        # def index():
+        #     current_time = datetime.now(timezone(timedelta(hours=2)))  # Adjust the timezone offset as per France
+        #     formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')
+        #     return render_template('index.html', current_time=formatted_time)
 
-        @self.app.route('/send', methods=['POST'])
-        def receive_message():
-            message = request.form.get('message')
-            if message:
-                self.received_messages.append(message)
-            return "Message received."
+        # @self.app.route('/send', methods=['POST'])
+        # def receive_message():
+        #     message = request.form.get('message')
+        #     if message:
+        #         self.received_messages.append(message)
+        #     return "Message received."
 
     def start(self):
-        self.app.run(host=self.server_address, port=self.server_port)
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.server_socket.setsockopt(
             socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -34,11 +33,12 @@ class WSServer:
         print("Serveur WebSocket démarré.")
 
     def handle_clients(self):
-        inputs = [self.server_socket] + self.clients
+        inputs = [self.server_socket]
         outputs = []
 
         try:
-            readable, writable, exceptional = select.select(inputs, outputs, inputs, 0.1)
+            readable, writable, exceptional = select.select(
+                inputs, outputs, inputs, 0.1)
 
             for sock in readable:
                 if sock is self.server_socket:

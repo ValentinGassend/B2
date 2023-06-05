@@ -5,191 +5,191 @@
       "date": "2023-05-27",
       "heure": "14:00",
       "lieu": "Bureau A101",
-      "titre": "R\u00e9union d'\u00e9quipe",
+      "titre": "Réunion d'équipe",
       "informations_supplementaires": "Ordre du jour : discussion des projets en cours.",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-27",
+        "heure": "13:30"
       }
     },
     {
       "id": 1,
       "date": "2023-05-28",
       "heure": "10:30",
-      "lieu": "Salle de conf\u00e9rence B",
-      "titre": "Pr\u00e9sentation client",
-      "informations_supplementaires": "Pr\u00e9senter les r\u00e9sultats de l'\u00e9tude de march\u00e9 au client ABC Corp.",
+      "lieu": "Salle de conférence B",
+      "titre": "Présentation client",
+      "informations_supplementaires": "Présenter les résultats de l'étude de marché au client ABC Corp.",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-28",
+        "heure": "10:00"
       }
     },
     {
       "id": 2,
       "date": "2023-05-29",
       "heure": "15:00",
-      "lieu": "Caf\u00e9t\u00e9ria",
-      "titre": "Pause caf\u00e9",
-      "informations_supplementaires": "Rencontre informelle pour discuter des derniers d\u00e9veloppements de l'entreprise.",
+      "lieu": "Cafétéri",
+      "titre": "Pause café",
+      "informations_supplementaires": "Rencontre informelle pour discuter des derniers développements de l'entreprise.",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-29",
+        "heure": "14:30"
       }
     },
     {
       "id": 4,
-      "date": "2023-05-19 00:00:00 +02:00",
-      "heure": "2023-05-30 18:00:00 +02:00",
+      "date": "2023-05-30",
+      "heure": "18:00",
       "lieu": "",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-30",
+        "heure": "17:30"
       }
     },
     {
       "id": 5,
-      "date": "2023-05-19 00:00:00 +02:00",
-      "heure": "2023-05-30 18:00:00 +02:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "date": "2023-05-30",
+      "heure": "18:00",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-30",
+        "heure": "17:30"
       }
     },
     {
       "id": 6,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
       "lieu": "",
       "titre": "rendez-vous",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 7,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
       "lieu": "",
       "titre": "rendez-vous",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 8,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
       "lieu": "",
       "titre": "rendez-vous",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 9,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 10,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 11,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 12,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
       "lieu": "",
       "titre": "rendez-vous",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 13,
-      "date": "2023-05-19 00:00:00 +02:00",
+      "date": "2023-05-19",
       "heure": "18:00",
       "lieu": "",
       "titre": "rendez-vous",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 14,
-      "date": "vendredi, 19. mai",
+      "date": "2023-05-19",
       "heure": "18:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 15,
-      "date": "vendredi 19 mai",
+      "date": "2023-05-19",
       "heure": "18:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
-        "date": "",
-        "heure": ""
+        "date": "2023-05-19",
+        "heure": "17:30"
       }
     },
     {
       "id": 16,
       "date": "2023-06-01",
       "heure": "20:30",
-      "lieu": "rendez-vous chez le m\u00e9decin",
+      "lieu": "rendez-vous chez le médecin",
       "titre": "",
       "informations_supplementaires": "",
       "rappel": {
         "date": "2023-06-03",
-        "heure": ""
+        "heure": "20:00"
       }
     }
   ]

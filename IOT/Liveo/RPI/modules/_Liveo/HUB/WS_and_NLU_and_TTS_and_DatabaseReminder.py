@@ -1,3 +1,4 @@
+import webbrowser
 from WebSocket.WSServer import WSServer
 from NLU.nlu import Nlu
 from TTS.tts import TTS
@@ -11,14 +12,16 @@ from datetime import datetime
 import subprocess
 import locale
 locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
-import webbrowser
 
-url = "http://192.168.1.16:8082/"
+url = "http://192.168.43.242:8082/"
 
 subprocess.run("sudo modprobe snd_bcm2835", shell=True)
+
+
 def signal_handler(signal, frame):
     print('Arrêt du serveur WebSocket.')
     sys.exit(0)
+
 
 MyManager = Rfid_BLE_manager(numDevice=2)
 #################### Meeting Manager ######################
@@ -28,10 +31,10 @@ MyMeetingManager = Meeting(
 ############# Natural Laguage Understanding ###############
 fited = False
 MyTraductor = Nlu()
-MyTraductor.fit_rdv()
-MyTraductor.fit_choice()
-MyTraductor.fit_bool()
-MyTraductor.fit_remind()
+# MyTraductor.fit_rdv()
+# MyTraductor.fit_choice()
+# MyTraductor.fit_bool()
+# MyTraductor.fit_remind()
 print("fited")
 fited = True
 ########################### TTS ###########################
@@ -49,24 +52,24 @@ signal.signal(signal.SIGINT, signal_handler)
 delay_start_time = None
 AgendaPressedNumber = False
 ID_PC = False
-LED_rappel=False
+LED_rappel = False
 last_sound_time = None
-webbrowser.get().open(url, new=2, autoraise=True)
 while True and fited:
     server.handle_clients()
     if MyManager.lunch():
         MySpeaker.sound(
-                            "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Digital-bell.wav")
+            "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Digital-bell.wav")
         server.send_to_all_clients(
             "LED_static")
-    else :
+    else:
         if MyMeetingManager.check_current_date():
             if not LED_rappel:
                 server.send_to_all_clients(
-                                "LED_rappel")
+                    "LED_rappel")
                 LED_rappel = True
             if last_sound_time is None or time.time() - last_sound_time >= 300:
-                MySpeaker.sound("/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Echo.wav")
+                MySpeaker.sound(
+                    "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Echo.wav")
                 last_sound_time = time.time()
         received_messages = server.get_received_messages()
         # server.handle_clients()
@@ -78,7 +81,8 @@ while True and fited:
                 if message.split("Rdv#", 1)[0] == "PC Whisper":
                     # Récupère l'analyse Whisper
                     value = message.split("Rdv#", 1)[1]
-                    nlu_rdv = MyTraductor.run_rdv(text=value) #ATTENTION DESACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
+                    # ATTENTION DESACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
+                    nlu_rdv = MyTraductor.run_rdv(text=value)
                     # ATTENTION ACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
                     # print("FAKED RESULT")
                     # nlu_rdv = MyTraductor.run_rdv(
@@ -128,7 +132,7 @@ while True and fited:
                         json_data['id'] = -1
                         print(json_data)
                         MySpeaker.talk("Vous avez un "+json_data['titre']+json_data['lieu']+" à " +
-                                    json_data['heure']+" le "+json_data['date']+". Est-ce correct ?")
+                                       json_data['heure']+" le "+json_data['date']+". Est-ce correct ?")
                         # server.send_to_all_clients("Whisper Bool")
                         server.send_to_all_clients(
                             "Whisper_rdv data_OK")
@@ -138,7 +142,8 @@ while True and fited:
                 elif message.split("Bool#", 1)[0] == "PC Whisper":
                     # Récupère l'analyse Whisper
                     value = message.split("Bool#", 1)[1]
-                    nlu_bool = MyTraductor.run_bool(text=value) #ATTENTION DESACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
+                    # ATTENTION DESACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
+                    nlu_bool = MyTraductor.run_bool(text=value)
                     # ATTENTION ACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
                     # print("FAKED RESULT")
                     # nlu_bool = MyTraductor.run_bool(
@@ -164,7 +169,8 @@ while True and fited:
                 elif message.split("Remind#", 1)[0] == "PC Whisper":
                     # Récupère l'analyse Whisper
                     value = message.split("Remind#", 1)[1]
-                    nlu_remind = MyTraductor.run_remind(text=value) #ATTENTION DESACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
+                    # ATTENTION DESACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
+                    nlu_remind = MyTraductor.run_remind(text=value)
                     # ATTENTION ACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
                     # print("FAKED RESULT")
                     # nlu_remind = MyTraductor.run_remind(
@@ -214,6 +220,6 @@ while True and fited:
                             "Whisper_remind data_OK")
                         MySpeaker.talk(
                             "c'est noté, ravis d'avoir pu vous aider")
-                        
+
                 elif message == "LED":
                     server.send_to_all_clients("LED_off")

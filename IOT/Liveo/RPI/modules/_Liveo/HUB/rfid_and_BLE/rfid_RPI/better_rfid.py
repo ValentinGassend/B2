@@ -84,7 +84,7 @@ class Rfid_Trigger:
     def __init__(self, alertDelegate, numDevice):
         self.MIFAREReader_first = mfrc522.MFRC522()
         self.numDevice = numDevice
-        if self.numDevice==2:
+        if self.numDevice == 2:
             self.MIFAREReader_second = mfrc522.MFRC522(device=1)
         self.continue_reading = True
         self.discoverable = False
@@ -92,7 +92,7 @@ class Rfid_Trigger:
         print("Welcome to the MFRC522 data read example")
         print("Press Ctrl-C to stop.")
 
-        #----- here is my checker -----#
+        # ----- here is my checker -----#
         signal.signal(signal.SIGINT, self.end_read)
         self.alertDelegate = alertDelegate
         self.state = RfidNotReadyState()
@@ -100,7 +100,7 @@ class Rfid_Trigger:
     def reset(self):
         self.continue_reading = True
         self.MIFAREReader_first = mfrc522.MFRC522()
-        if self.numDevice==2:
+        if self.numDevice == 2:
             self.MIFAREReader_second = mfrc522.MFRC522(device=1)
         self.discoverable = False
         self.started = None
@@ -134,12 +134,13 @@ class Rfid_Trigger:
             else:
                 card = self.disconnected()
             return card
+
     def disconnected(self):
         self.updatestate(RfidNotReadyState())
         card = False
 
         return card
-        
+
     def read(self):
         while self.continue_reading:
             (status_first, TagType) = self.MIFAREReader_first.Request(
@@ -186,7 +187,7 @@ class Rfid_Trigger:
             sys.exit()
 
 
-def checkRFIDIsReady(rfidObj, nbTry=3, delay = 5):
+def checkRFIDIsReady(rfidObj, nbTry=3, delay=5):
     counter = 0
     while (True):
         if counter >= nbTry:
