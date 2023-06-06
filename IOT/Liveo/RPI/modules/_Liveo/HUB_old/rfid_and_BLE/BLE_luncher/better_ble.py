@@ -221,7 +221,7 @@ class Ble:
                     while time() - self.start_time < self.delay_ms/1000:
                         pass  # Wait for the specified delay
                     self.child.sendline("char-write-req 0x0018 5250492d4c6976656f")
-                    line = self.child.readline().decode()
+                    line = self.child.readlines().decode()
                     print(line)
                     if line.split("value:"):
                         array = line.split("value:", 1)

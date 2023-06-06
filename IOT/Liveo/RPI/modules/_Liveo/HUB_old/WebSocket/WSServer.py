@@ -1,14 +1,27 @@
 import socket
 import select
+from datetime import datetime, timezone, timedelta
 
 
 class WSServer:
     def __init__(self, address, port):
         self.server_address = address
         self.server_port = port
-        self.server_socket = None
-        self.clients = []
         self.received_messages = []
+        self.clients = []
+
+        # @self.app.route('/')
+        # def index():
+        #     current_time = datetime.now(timezone(timedelta(hours=2)))  # Adjust the timezone offset as per France
+        #     formatted_time = current_time.strftime('%Y-%m-%d %H:%M:%S')
+        #     return render_template('index.html', current_time=formatted_time)
+
+        # @self.app.route('/send', methods=['POST'])
+        # def receive_message():
+        #     message = request.form.get('message')
+        #     if message:
+        #         self.received_messages.append(message)
+        #     return "Message received."
 
     def start(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -20,12 +33,12 @@ class WSServer:
         print("Serveur WebSocket démarré.")
 
     def handle_clients(self):
-        inputs = [self.server_socket] + self.clients
+        inputs = [self.server_socket]
         outputs = []
 
         try:
             readable, writable, exceptional = select.select(
-                inputs, outputs, inputs)
+                inputs, outputs, inputs, 0.1)
 
             for sock in readable:
                 if sock is self.server_socket:
@@ -78,31 +91,3 @@ class WSServer:
             self.server_socket.close()
             self.server_socket = None
             print("Serveur WebSocket arrêté.")
-
-class WSClient:
-    def __init__(self, server_address, server_port):
-        self.server_address = server_address
-        self.server_port = server_port
-        self.client_socket = None
-
-    def connect(self):
-        self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client_socket.connect((self.server_address, self.server_port))
-        print("Connecté au serveur WebSocket.")
-
-    def send_message(self, message):
-        if self.client_socket:
-            self.client_socket.sendall(message.encode("utf-8"))
-
-    def receive_message(self):
-        if self.client_socket:
-            message = self.client_socket.recv(1024)
-            if message:
-                return message.decode("utf-8")
-        return None
-
-    def close(self):
-        if self.client_socket:
-            self.client_socket.close()
-            self.client_socket = None
-            print("Déconnecté du serveur WebSocket.")
