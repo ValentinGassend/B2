@@ -27,15 +27,22 @@ ble_obj.on_write(ble_obj.on_rx)
 ble_obj.stop()
 
 # Configuration LED et bouton
-blue_pin = Pin(27, Pin.OUT)
-green_pin = Pin(14, Pin.OUT)
-red_pin = Pin(26, Pin.OUT)
-my_led = Led(blue_pin, green_pin, red_pin)
+blue_pin_btn = Pin(27, Pin.OUT)
+green_pin_btn = Pin(14, Pin.OUT)
+red_pin_btn = Pin(26, Pin.OUT)
+my_led_btn = Led(blue_pin_btn, green_pin_btn, red_pin_btn)
+
+
+blue_pin_rappel = Pin(32, Pin.OUT)
+green_pin_rappel = Pin(33, Pin.OUT)
+red_pin_rappel = Pin(25, Pin.OUT)
+my_led_rappel = Led(blue_pin_rappel, green_pin_rappel, red_pin_rappel)
+
 my_button = Button(23)
 button_status = False
 start_time = 0
 led_duration = 1  # Durée d'allumage de la LED en secondes
-
+led_rappel_active = False
 # Configuration gestionnaire de fichiers
 file_name = 'button_press.json'
 counter = ButtonPressCounter(file_name)
@@ -64,6 +71,7 @@ while True:
         next_time = base_time + 60  # Ajouter 60 secondes pour la prochaine minute
 
         if not time.time() < next_time:
+            appointment_found = False
             # Extraire les éléments de la date de la structure de temps locale
             year = localtime[0]
             month = localtime[1]
@@ -71,18 +79,37 @@ while True:
             hour = localtime[3]
             minute = localtime[4]
             second = localtime[5]
+            for i in range(minute, minute + 10):
+                # Vérifier si le nombre de minutes dépasse 59
+                if i > 59:
+                    # Passer à l'heure suivante
+                    hour += 1
+                    i = i % 60
 
-            # Vérifier s'il y a un rendez-vous à l'heure actuelle
-            target_date = f"{year:04d}-{month:02d}-{day:02d} {hour:02d}:{minute:02d}"
-            appointment_exists = manager.check_appointment(target_date)
+                # Vérifier si le changement d'heure nécessite un changement de jour
+                if hour > 23:
+                    # Passer au jour suivant
+                    day += 1
+                    hour = hour % 24
 
-            if appointment_exists:
-                print(f"Un rendez-vous est prévu à la date {target_date}")
-                my_led.on_red()
+                # Vérifier s'il y a un rendez-vous à l'heure actuelle
+                target_date = f"{year:04d}-{month:02d}-{day:02d} {hour:02d}:{i:02d}"
+                appointment_exists = manager.check_appointment(target_date)
+
+                if appointment_exists:
+                    print(f"Un rendez-vous est prévu à la date {target_date}")
+                    appointment_found = True
+
+            if appointment_found:
+                # Allumer la LED des rendez-vous en rouge si un rendez-vous a été trouvé
+                if not led_rappel_active:
+                    red_pin_rappel.on()
+                    led_rappel_active = True
             else:
-                print(f"Aucun rendez-vous n'est prévu à la date {target_date}")
-                my_led.turn_off()
-
+                # Éteindre la LED des rendez-vous si aucun rendez-vous n'a été trouvé
+                if led_rappel_active:
+                    red_pin_rappel.off()
+                    led_rappel_active = False
             # Mettre à jour le temps de base pour la prochaine itération
             base_time = next_time
 
@@ -93,10 +120,10 @@ while True:
                 counter.add_button_press()  # Ajouter un appui sur le bouton dans le fichier
         else:
             print("Appui long détecté")
-            my_led.on_green()
+            my_led_btn.on_green()
             current_time = time.time()
             if current_time - start_time >= led_duration:
-                my_led.turn_off()
+                my_led_btn.turn_off()
                 button_status = False
 
     # Gestion des messages Bluetooth
@@ -132,3 +159,5 @@ while True:
         message = "Server message"
         print("Message envoyé :", message)
         ble_obj.send(message.encode())  # Envoyer un message au client connecté
+
+
