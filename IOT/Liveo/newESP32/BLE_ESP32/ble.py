@@ -3,9 +3,10 @@ import time
 from BLE_ESP32.ble_simple_peripheral import BLESimplePeripheral
 
 class Ble(BLESimplePeripheral):
-    def __init__(self, ble, name="mpy-uart"):
+    def __init__(self, ble, name="Liveo"):
         self.ble = ble
-        super().__init__(self.ble, name)
+        self.name = name
+        super().__init__(self.ble, self.name)
         self.value = False
         self.connected = False  # Ajoute l'attribut connected
         self.response = None  # Variable pour stocker la réponse
@@ -32,8 +33,9 @@ class Ble(BLESimplePeripheral):
         self.connected = False
 
     def start(self):
-        self.ble.active(True)
-        self.ble.gap_advertise(0, adv_data=self._payload)
+#         self.ble.active(True)
+#         self.ble.gap_advertise(0, adv_data=self._payload)
+        super().__init__(self.ble, self.name)
 
     def stop(self):
         self.ble.active(False)

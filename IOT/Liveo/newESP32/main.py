@@ -41,13 +41,14 @@ my_led_rappel = Led(blue_pin_rappel, green_pin_rappel, red_pin_rappel)
 my_button = Button(23)
 button_status = False
 start_time = 0
-led_duration = 1  # Durée d'allumage de la LED en secondes
+led_duration = 2  # Durée d'allumage de la LED en secondes
 led_rappel_active = False
 # Configuration gestionnaire de fichiers
 file_name = 'button_press.json'
 counter = ButtonPressCounter(file_name)
 
 while True:
+    ble_obj.on_write(ble_obj.on_rx)
     # Lecture RFID
     consecutive_failures = rfid_trigger.read(consecutive_failures)
     current_state = rfid_trigger.get_state()
@@ -56,9 +57,11 @@ while True:
     if not current_state == previous_state:
         if current_state and not previous_state:
             print("Badge détecté !")
+            
             # Effectuer les actions souhaitées pour le badge détecté (exécuté une seule fois)
             # Activer le Bluetooth
             ble_obj.start()
+            print(current_state)
         elif not current_state and previous_state:
             print("Badge retiré !")
             # Effectuer les actions souhaitées pour le badge retiré (exécuté une seule fois)
@@ -125,7 +128,6 @@ while True:
             if current_time - start_time >= led_duration:
                 my_led_btn.turn_off()
                 button_status = False
-
     # Gestion des messages Bluetooth
     received_data = ble_obj.get_value()
     if received_data:
@@ -139,12 +141,17 @@ while True:
             counter.delete_button_press()  # Supprimer les informations du fichier
             ble_obj.response = "Data deleted"
         elif message == "Waiting Data":
-            data = counter.read_data()
-            if data is not None:
-                count = data['count']
-                ble_obj.response = f"Number of button presses: {count}"
-            else:
+            try:
+                data = counter.read_data()
+                if data is not None:
+                    count = data['count']
+                    ble_obj.response = f"pressed_value: {count}"
+                else:
+                    ble_obj.response = "No data available"
+            except:
                 ble_obj.response = "No data available"
+        elif message == "Data retrieved":
+            pass
         else:
             ble_obj.response = "Unknown command"
 

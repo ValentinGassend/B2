@@ -31,8 +31,7 @@ class ButtonPressCounter:
             self.write_data(data)
 
     def delete_button_press(self):
-        try:
-            with open(self.file_name, 'w') as file:
-                file.write('')
-        except FileNotFoundError:
-            pass
+        data = self.read_data()
+        if data is not None:
+            data['count'] = 0
+            self.write_data(data)

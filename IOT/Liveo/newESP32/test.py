@@ -41,7 +41,7 @@ my_led_rappel = Led(blue_pin_rappel, green_pin_rappel, red_pin_rappel)
 my_button = Button(23)
 button_status = False
 start_time = 0
-led_duration = 1  # Durée d'allumage de la LED en secondes
+led_duration = 2  # Durée d'allumage de la LED en secondes
 led_rappel_active = False
 # Configuration gestionnaire de fichiers
 file_name = 'button_press.json'
@@ -125,7 +125,6 @@ while True:
             if current_time - start_time >= led_duration:
                 my_led_btn.turn_off()
                 button_status = False
-
     # Gestion des messages Bluetooth
     received_data = ble_obj.get_value()
     if received_data:
