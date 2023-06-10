@@ -22,8 +22,16 @@ class WSServerStateRunning(WSServerState):
             client_socket.close()
         elif message == "LED":
             server.send_to_all_clients("LED_static")
-        elif message.startswith("MET UN PARAMETRE ICI"):
-            server.send_to_all_clients("LED_static")
+        elif message == "LED_STATE":
+            server.send_to_all_clients("Current state: " + self.get_current_state())
+
+    def get_current_state(self):
+        if self.fade_thread.is_alive():
+            return "Fade mode"
+        elif self.static_thread.is_alive():
+            return "Static mode"
+        else:
+            return "Off"
 
     def handle_clients(self, server):
         inputs = [server.server_socket] + server.clients

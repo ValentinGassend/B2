@@ -6,7 +6,7 @@ from Websocket.WebsocketManager import WSClient
 led_mode = LedMode([Color(164, 193, 255, 0)])
 
 # Création de l'objet WSClient
-client = WSClient("192.168.1.18", 8082, "LED")
+client = WSClient("192.168.1.16", 8082, "LED")
 client.connect()
 
 try:
@@ -17,7 +17,11 @@ try:
         if received_message == "ID":
             print("Message envoyé au serveur : '" + client.get_id() + "'")
             client.send_message(client.get_id())
-        elif received_message.startswith("LED"):
+        if received_message == "LED_STATE":
+            print("Message envoyé au serveur : '" + led_mode.get_led_status() + "'")
+            client.send_message(led_mode.get_led_status())
+            
+        elif received_message.startswith("LED_"):
             led_mode.handle_message(received_message)
 except KeyboardInterrupt:
     # Fermer la connexion client lorsqu'on appuie sur Ctrl+C

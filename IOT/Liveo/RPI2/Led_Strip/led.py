@@ -40,7 +40,7 @@ class LedMode:
 
         self.nbrColor = 0
 
-        pass
+        self.led_status = "Off_mode"  # Variable pour stocker l'état des LEDs
 
     def handle_message(self, message):
         if message == "LED_fade":
@@ -49,6 +49,10 @@ class LedMode:
                 self.fade_thread = threading.Thread(target=self.fade_loop)
                 self.fade_thread_stop.clear()
                 self.fade_thread.start()
+            self.led_status = "Fade_mode"
+        elif message == "LED_STATE":
+            
+            pass
         elif message == "LED_static":
             if not self.static_thread.is_alive():
                 self.static_thread = threading.Thread(target=self.static_loop)
@@ -57,6 +61,8 @@ class LedMode:
             else:
                 self.static_thread_stop.set()  # Définit l'Event pour arrêter le thread de "static"
                 self.static()
+        
+            self.led_status = "Static_mode"
         else:
             self.fade_thread_stop.set()  # Définit l'Event pour arrêter le thread de "fade"
             self.static_thread_stop.set()  # Définit l'Event pour arrêter le thread de "static"
@@ -79,6 +85,7 @@ class LedMode:
             else:
                 self.nbrColor = 0
         strip.show()
+        self.led_status = "Off_mode"  # Met à jour l'état des LEDs
 
     def static_loop(self):
         while not self.static_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
@@ -106,6 +113,7 @@ class LedMode:
                 else:
                     self.nbrColor = 0
         strip.show()
+        self.led_status = "Static_mode"  # Met à jour l'état des LEDs
 
     def fade_loop(self):
         while not self.fade_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
@@ -129,22 +137,22 @@ class LedMode:
                         strip.setPixelColor(i, self.colors[self.nbrColor])
                         if not self.max:
                             # fade out
-                            strip.setBrightness(
-                                int(((((currentTime - self.startedTime) / delay_ms) * 255) - 255) * -1))
+                            fade_out_brightness = int(((((currentTime - self.startedTime) / delay_ms) * 255) - 255) * -1)
+                            strip.setBrightness(max(0, min(255, fade_out_brightness)))
                             # fade in
-                            strip.setBrightness(
-                                int(((currentTime - self.startedTime) / delay_ms) * 255))
-                            if int(((currentTime - self.startedTime) / delay_ms) * 255) == 254:
+                            fade_in_brightness = int(((currentTime - self.startedTime) / delay_ms) * 255)
+                            strip.setBrightness(max(0, min(255, fade_in_brightness)))
+                            if fade_in_brightness == 254:
                                 self.max = True
                     else:
                         # fade in
-                        strip.setBrightness(
-                            int(((currentTime - self.startedTime - delay_ms) / delay_ms) * 255))
+                        fade_in_brightness = int(((currentTime - self.startedTime - delay_ms) / delay_ms) * 255)
+                        strip.setBrightness(max(0, min(255, fade_in_brightness)))
                         # fade out
-                        strip.setBrightness(
-                            int(((((currentTime - self.startedTime - delay_ms) / delay_ms) * 255) - 255) * -1))
+                        fade_out_brightness = int(((((currentTime - self.startedTime - delay_ms) / delay_ms) * 255) - 255) * -1)
+                        strip.setBrightness(max(0, min(255, fade_out_brightness)))
 
-                        if int(((((currentTime - self.startedTime - delay_ms) / delay_ms) * 255) - 255) * -1) == 1:
+                        if fade_out_brightness == 1:
                             self.max = False
                             self.nbrColor = self.nbrColor + 1
                             self.startedTime = time()
@@ -152,3 +160,7 @@ class LedMode:
                 else:
                     self.nbrColor = 0
         strip.show()
+        self.led_status = "Fade_mode"  # Met à jour l'état des LEDs
+
+    def get_led_status(self):
+        return self.led_status
