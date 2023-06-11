@@ -8,6 +8,7 @@ from BLE.ble import BLE, check_BLE_is_ready, ConnectedState, ConnectingState, Di
 from buttonFileCount.btn_file_count import ButtonPressCounter
 import json
 from TTS.tts import TTS
+from NLU.nlu import Nlu
 
 # Configuration du serveur WebSocket
 address = '192.168.1.16'
@@ -22,7 +23,6 @@ led_fade_duration = 1  # Durée de la LED fade en secondes
 
 base_time = time.time()  # Remplacez par votre temps de base
 next_time = base_time
-
 # Lancement du serveur dans un thread séparé
 def run_server():
     server.start()
@@ -33,7 +33,7 @@ def run_server():
             messages = server.get_received_messages()
             for message in messages:
                 for client_socket in server.clients:  # Parcours des clients connectés
-                    server.state.handle_message(server, message, client_socket)  # Utilisation de client_socket
+                    server.state.handle_message(server, message, client_socket,tts=Speaker,nlu=nlu)  # Utilisation de client_socket
     except KeyboardInterrupt:
         server.stop()
 
@@ -47,6 +47,7 @@ already_retrieved=False
 firstLunch = True
 firstLunchDelay = True
 Speaker = TTS()
+nlu = Nlu()
 while True:
     
     rfid_trigger.read()  # This will run indefinitely
@@ -139,5 +140,6 @@ while True:
             server.send_to_all_clients('Off_mode')
             server.send_to_all_clients("Whisper")
             firstLunchDelay=False
+
     else : 
         firstLunch=True

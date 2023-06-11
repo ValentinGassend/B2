@@ -6,12 +6,12 @@ class WSServerState:
     def handle_clients(self, server):
         pass
 
-    def handle_message(self, server, message, client_socket):
+    def handle_message(self, server, message, client_socket,tts,nlu):
         pass
 
 
 class WSServerStateRunning(WSServerState):
-    def handle_message(self, server, message, client_socket):
+    def handle_message(self, server, message, client_socket,tts,nlu):
         if message == "START":
             server.send_to_all_clients("Server is running")
         elif message == "STOP":
@@ -35,6 +35,8 @@ class WSServerStateRunning(WSServerState):
             pass
         elif message.startswith("MET UN PARAMETRE ICI"):
             server.send_to_all_clients("LED_static")
+
+
 
     def handle_clients(self, server):
         inputs = [server.server_socket] + server.clients
