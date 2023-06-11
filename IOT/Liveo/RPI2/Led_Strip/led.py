@@ -40,7 +40,8 @@ class LedMode:
 
         self.nbrColor = 0
 
-        self.led_status = "Off_mode"  # Variable pour stocker l'état des LEDs
+        self.led_status = "Off_mode"
+        self.ledOff  # Variable pour stocker l'état des LEDs
 
     def handle_message(self, message):
         if message == "LED_fade":
@@ -49,7 +50,6 @@ class LedMode:
                 self.fade_thread = threading.Thread(target=self.fade_loop)
                 self.fade_thread_stop.clear()
                 self.fade_thread.start()
-            self.led_status = "Fade_mode"
         elif message == "LED_STATE":
             
             pass
@@ -58,14 +58,19 @@ class LedMode:
                 self.static_thread = threading.Thread(target=self.static_loop)
                 self.static_thread_stop.clear()
                 self.static_thread.start()
-            else:
-                self.static_thread_stop.set()  # Définit l'Event pour arrêter le thread de "static"
-                self.static()
-        
-            self.led_status = "Static_mode"
+        elif message == "LED_off":
+            if not self.static_thread.is_alive():
+                self.static_thread = threading.Thread(target=self.off_loop)
+                self.static_thread_stop.clear()
+                self.static_thread.start()
         else:
-            self.fade_thread_stop.set()  # Définit l'Event pour arrêter le thread de "fade"
-            self.static_thread_stop.set()  # Définit l'Event pour arrêter le thread de "static"
+            if not self.static_thread.is_alive():
+                self.static_thread = threading.Thread(target=self.off_loop)
+                self.static_thread_stop.clear()
+                self.static_thread.start()
+
+    def off_loop(self):
+        while not self.static_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
             self.ledOff()
 
     def ledOff(self, strip=None, delay_ms=5):
@@ -112,7 +117,12 @@ class LedMode:
                         strip.setBrightness(0)
                 else:
                     self.nbrColor = 0
-        strip.show()
+
+            strip.show()  # Afficher les pixels après chaque itération de la boucle j
+
+            if currentTime - self.startedTime >= delay_ms:
+                break  # Sortir de la boucle j si le délai spécifié est atteint
+
         self.led_status = "Static_mode"  # Met à jour l'état des LEDs
 
     def fade_loop(self):

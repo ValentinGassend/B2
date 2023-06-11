@@ -1,6 +1,6 @@
 import socket
 import select
-
+import time
 
 class WSServerState:
     def handle_clients(self, server):
@@ -131,7 +131,18 @@ class WSClient:
     def send_message(self, message):
         if self.client_socket:
             self.client_socket.sendall(message.encode("utf-8"))
+    def is_server_active(self):
+        # Envoie un message spécial au serveur
+        self.send_message("PING")
 
+        # Attend une réponse du serveur pendant 1 seconde
+        start_time = time.time()
+        while time.time() - start_time < 1:
+            received_message = self.receive_message()
+            if received_message == "LED_PONG":
+                return True
+
+        return False
     def receive_message(self):
         if self.client_socket:
             message = self.client_socket.recv(1024)

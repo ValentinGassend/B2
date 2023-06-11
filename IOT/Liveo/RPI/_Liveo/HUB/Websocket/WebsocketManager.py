@@ -16,6 +16,8 @@ class WSServerStateRunning(WSServerState):
             server.send_to_all_clients("Server is running")
         elif message == "STOP":
             server.send_to_all_clients("Server is stopped")
+        elif message == "PING":
+            server.send_to_all_clients("LED_PONG")
         elif message == "DISCONNECT":
             server.send_to_all_clients("Client disconnected: " + str(client_socket.getpeername()))
             server.clients.remove(client_socket)
@@ -99,6 +101,8 @@ class WSServer:
             self.set_led_status("Static_mode")
         elif message == "Off_mode":
             self.set_led_status("Off_mode")
+        else :
+            print("status is not good")
         for client_socket in self.clients:
             try:
                 print("Message envoyé : " + message)

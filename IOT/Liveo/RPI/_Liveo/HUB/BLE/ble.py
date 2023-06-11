@@ -7,6 +7,8 @@ class BLE:
         self.DEVICE = "0C:B8:15:F8:6E:02"  # Replace with your device's MAC address
         self.connected = False
         self.line = ""
+        self.btn_value = None
+        self.value_Retrived = False
 
     def connect(self):
         if not self.connected:
@@ -15,13 +17,15 @@ class BLE:
                 self.child.expect("Connection successful", timeout=10)
                 self.connected = True
                 print("Connexion BLE établie.")
+                # Envoi initial du message
+                self.send_message("Hello server!")
             except pexpect.exceptions.TIMEOUT:
                 print("Échec de la connexion BLE.")
 
     def disconnect(self):
         if self.connected:
             self.child.sendline("disconnect")
-            self.child.expect("disconnect successfully", timeout=60)
+            # self.child.expect("disconnect successfully", timeout=60)
             self.connected = False
             print("BLE est maintenant déconnecté.")
 
@@ -62,20 +66,60 @@ class BLE:
 
     def receive_message(self):
         if self.connected:
-            self.line = self.child.readline().decode()
+            try:
+                self.line = self.child.readline().decode()
+            except:
+                print('not able to read lines')
             if "value:" in self.line:
-                    hex_data = self.line.split("value:")[1].strip()
+                    hex_data = self.line.split("value: ")[1].strip()
                     byte_array = bytearray.fromhex(hex_data)
                     received_message = byte_array.decode("utf-8")
-                    print("Message reçu :", received_message)
+                    if received_message:
+                        self.handle_message(received_message)
             else:
                 print("Aucune notification reçue.")
+                self.disconnect()
         else:
             print("Pas de connexion BLE établie.")
+            self.disconnect()
 
     def check_connection(self):
         return self.connected
+    
+    def handle_message(self, content):
+        if content == "Hi client!":
+            print("Serveur know who i am :)")
+            self.send_message("Waiting Data")
+        elif content.strip().startswith("pressed_value:"):
+            try:
+                
+                # ATTENTION IL FAUT MODIFIER LA DATA
+                # self.btn_value = int(content.split(":")[1].strip())
+                self.btn_value = int(10)
+                self.value_Retrived = True
+                if self.btn_value > 0 :
+                    print(f"user trigger btn {self.btn_value} time")
+                    self.send_message("delete_data")
+                    self.disconnect()
+                else: 
+                    print("data is empty")
+                    self.disconnect()
+            except (ValueError, IndexError):
+                print("Invalid message format")
+        elif content == "No data available" or content == "Data deleted":
+            # self.disconnect()
+            # print("Disconnected")
+            pass
 
+    def check_btn_value(self):
+        return self.btn_value
+    
+    def check_value_retrive(self):
+        return self.value_Retrived
+    
+    def reset_value_retrive(self):
+        self.value_Retrived = False
+    
 
 class State:
     def check_connection(self, ble):

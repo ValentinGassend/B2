@@ -5,6 +5,7 @@ import subprocess
 class TTS:
     def __init__(self):
         mixer.init()
+        subprocess.run("sudo modprobe snd_bcm2835", shell=True)
 
     def talk(self, content):
         if not isinstance(content, str):
