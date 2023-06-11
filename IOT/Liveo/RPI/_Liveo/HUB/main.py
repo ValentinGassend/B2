@@ -33,10 +33,12 @@ def run_server():
             messages = server.get_received_messages()
             for message in messages:
                 for client_socket in server.clients:  # Parcours des clients connectés
-                    server.state.handle_message(server, message, client_socket,tts=Speaker,nlu=nlu)  # Utilisation de client_socket
+                    server.state.handle_message(server, message, client_socket,tts=Speaker,nlu=nlu,appointment=manager)  # Utilisation de client_socket
     except KeyboardInterrupt:
         server.stop()
 
+nlu = Nlu()
+nlu.fit()
 server_thread = Thread(target=run_server)
 server_thread.start()
 
@@ -47,7 +49,6 @@ already_retrieved=False
 firstLunch = True
 firstLunchDelay = True
 Speaker = TTS()
-nlu = Nlu()
 while True:
     
     rfid_trigger.read()  # This will run indefinitely

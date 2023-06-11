@@ -64,7 +64,18 @@ class AppointmentManager:
                 self.save_data(data)
                 return True
         return False
+    def update_appointment_reminder(self, appointment_id, new_reminder):
+        data = self.load_data()
+        appointments = data.get('rendezvous', [])
 
+        for appointment in appointments:
+            if appointment['id'] == appointment_id:
+                appointment['rappel'] = new_reminder
+                self.save_data(data)
+                print("Le rappel a été modifié avec succès.")
+                return True
+        print("Le rendez-vous avec l'id spécifié n'a pas été trouvé.")
+        return False
     def reset_appointment_ids(self):
         data = self.load_data()
         appointments = data.get('rendezvous', [])
