@@ -6,7 +6,10 @@ import keyboard
 neverStarted = True
 # Adresse IP et port du serveur
 server_address = '192.168.1.16'
-server_port = 8082
+
+
+# server_address = '192.168.43.242'
+server_port = 8081
 
 # Création de l'instance du client
 client = WSClient(server_address, server_port)
@@ -33,6 +36,7 @@ def MyCallbackRemind(data):
 
 my_assistant = False
 previousResponse = False
+id_not_recieved = True
 while True:
 
     if neverStarted:
@@ -43,13 +47,15 @@ while True:
     response = str(client.receive_message())
 
     if not previousResponse == response:
-        print("Réponse du serveur : '" + response + "'")
+        if not response == "LED_PONG":
+            print("Réponse du serveur : '" + response + "'")
     previousResponse = response
 
-    if response == "ID":
+    if response == "ID" and id_not_recieved:
         print("Message envoyé au serveur : '" + Id + "'")
         client.send_message(Id)
-
+    if response == "PC_ok":
+        id_not_recieved=False
     if response == "Whisper":
         my_assistant_RDV = MyAssistant(model='medium', commands_callback=MyCallbackRDV,
                                       n_threads=10, input_device=0, q_threshold=6)
@@ -60,6 +66,8 @@ while True:
         my_assistant_remind = MyAssistant(model='medium', commands_callback=MyCallbackRemind,
                                           n_threads=10, input_device=0, q_threshold=6)
 
+        my_assistant_bool.close()
+        my_assistant_remind.close()
         my_assistant_RDV.start()
 
     if response == "Whisper_rdv data_notOK":
@@ -88,7 +96,7 @@ while True:
         my_assistant_remind.close()
         my_assistant_remind.start()
 
-    if response == "Whisper_remind data_OK":
+    if response == "Whisper_remind data_OK" :
         my_assistant_remind.close()
 
     try:

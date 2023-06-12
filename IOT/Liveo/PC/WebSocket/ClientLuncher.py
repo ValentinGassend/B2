@@ -19,7 +19,8 @@ while True:
 
     # Réception de la réponse du serveur
     response = client.receive_message()
-    print("Réponse du serveur :", response)
+    if not response == "LED_PONG":
+        print("Réponse du serveur :", response)
 
     # Conditions de sortie de la boucle
     if response == "Leave" or response is None:

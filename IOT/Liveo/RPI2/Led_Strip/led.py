@@ -63,12 +63,6 @@ class LedMode:
                 self.static_thread = threading.Thread(target=self.off_loop)
                 self.static_thread_stop.clear()
                 self.static_thread.start()
-        else:
-            if not self.static_thread.is_alive():
-                self.static_thread = threading.Thread(target=self.off_loop)
-                self.static_thread_stop.clear()
-                self.static_thread.start()
-
     def off_loop(self):
         while not self.static_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
             self.ledOff()

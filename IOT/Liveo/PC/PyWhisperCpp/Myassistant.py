@@ -160,7 +160,7 @@ class MyAssistant:
         self.running = False  # Set the running flag to False
 
         # Wait for the audio stream to finish processing
-        time.sleep(0.5)
+        time.sleep(1/10)
 
         sd.stop()
 
