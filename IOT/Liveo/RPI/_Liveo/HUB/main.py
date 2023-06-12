@@ -76,7 +76,6 @@ while True:
             btn_value = ble_client.check_btn_value()
             if btn_value and btn_value > 0:
                 button_press_counter.update_button_press(btn_value)
-                server.send_to_all_clients('LED_static')
 
 
         # Déconnexion BLE
@@ -99,7 +98,7 @@ while True:
                 print(f"Rappel : {current_appointment}")
                 # Envoyer LED fade en WebSocket à tous les clients
                 if server.get_led_status() == "Off_mode":
-                    server.send_to_all_clients('LED_fade')
+                    server.set_led_status("Fade_mode")
                     server.send_to_all_clients('Fade_mode')
             else:
                 print(f"Aucun rappel prévu")
@@ -113,7 +112,7 @@ while True:
                     # Envoyer LED fade en WebSocket à tous les clients
 
                     if server.get_led_status() == "Off_mode":
-                        server.send_to_all_clients('LED_fade')
+                        server.set_led_status("Fade_mode")
                         server.send_to_all_clients('Fade_mode')
                         break  # Sortir de la boucle dès qu'un rendez-vous est trouvé
 
@@ -131,15 +130,13 @@ while True:
         button_press_counter.update_button_press(btn_value)
     if ble_client.check_value_retrive():
         if firstLunch:
-            server.send_to_all_clients('LED_static')
-            server.send_to_all_clients('Static_mode')
+            server.set_led_status("Static_mode")
             Speaker.sound("Hub/TTS/Digital-bell.wav")
             startTime = time.time()
             firstLunch=False
         if time.time() - startTime > 1 and firstLunchDelay:
-            server.send_to_all_clients('LED_off')
-            server.send_to_all_clients('Off_mode')
-            server.send_to_all_clients("Whisper")
+            server.set_led_status("Off_mode")
+            # server.send_to_all_clients("Whisper")
             firstLunchDelay=False
 
     else : 

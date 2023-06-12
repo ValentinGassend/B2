@@ -3,16 +3,17 @@ import select
 import time
 from datetime import datetime
 
+
 class WSServerState:
     def handle_clients(self, server):
         pass
 
-    def handle_message(self, server, message, client_socket,tts,nlu,appointment):
+    def handle_message(self, server, message, client_socket, tts, nlu, appointment):
         pass
 
 
 class WSServerStateRunning(WSServerState):
-    def handle_message(self, server, message, client_socket,tts=None,nlu=None,appointment=None):
+    def handle_message(self, server, message, client_socket, tts=None, nlu=None, appointment=None):
         if message == "START":
             server.send_to_all_clients("Server is running")
         elif message == "STOP":
@@ -20,10 +21,12 @@ class WSServerStateRunning(WSServerState):
         elif message == "PING":
             server.send_to_all_clients("LED_PONG")
         elif message == "DISCONNECT":
-            server.send_to_all_clients("Client disconnected: " + str(client_socket.getpeername()))
+            server.send_to_all_clients(
+                "Client disconnected: " + str(client_socket.getpeername()))
             server.clients.remove(client_socket)
             client_socket.close()
         elif message == "LED":
+            server.setID(message)
             server.send_to_all_clients("LED_STATE")
         elif message == "LED_STATE":
             server.send_to_all_clients(self.get_current_state())
@@ -38,8 +41,9 @@ class WSServerStateRunning(WSServerState):
             server.send_to_all_clients("LED_static")
         # ATTENTION ACTIVER CAR LE TRIGGER DU MESSAGE N'EST PAS PRET POUR LE MOMENT
         elif message == "PC":
-            server.send_to_all_clients("Whisper")
-
+            server.setID(message)
+            server.send_to_all_clients("PC_ok")
+            pass
 
         elif message.split("Rdv#", 1)[0] == "PC Whisper":
             # Récupère l'analyse Whisper
@@ -79,7 +83,7 @@ class WSServerStateRunning(WSServerState):
                         date_parsed = datetime.strptime(
                             date_value, "%Y-%m-%d %H:%M:%S %z")
                         json_data['date'] = date_parsed.strftime(
-                            "%A %d %B")
+                            "%Y-%m-%d")
                     elif slot['slotName'] == 'heure':
                         heure_value = slot['value']['value']
                         heure_parsed = datetime.strptime(
@@ -96,7 +100,7 @@ class WSServerStateRunning(WSServerState):
                 print(json_data)
                 appointment.add_appointment(json_data)
                 tts.talk("Vous avez un "+json_data['titre']+json_data['lieu']+" à " +
-                               json_data['heure']+" le "+json_data['date']+". Est-ce correct ?")
+                         json_data['heure']+" le "+json_data['date']+". Est-ce correct ?")
                 # server.send_to_all_clients("Whisper Bool")
                 server.send_to_all_clients(
                     "Whisper_rdv data_OK")
@@ -123,7 +127,7 @@ class WSServerStateRunning(WSServerState):
                     "Whisper_bool data_notOK")
                 delay_start_time = time.time()
             else:
-
+                time.sleep(1/10)
                 server.send_to_all_clients(
                     "Whisper_bool data_OK")
         elif message == "Whisper_bool nextCommand":
@@ -169,7 +173,7 @@ class WSServerStateRunning(WSServerState):
                         date_parsed = datetime.strptime(
                             date_value, "%Y-%m-%d %H:%M:%S %z")
                         json_data_remind["rappel"]["date"] = date_parsed.strftime(
-                            "%A %d %B")
+                            "%Y-%m-%d")
                     elif slot['slotName'] == 'time':
                         heure_value = slot['value']['value']
                         heure_parsed = datetime.strptime(
@@ -178,15 +182,15 @@ class WSServerStateRunning(WSServerState):
                             "%H:%M")
                 json_data_remind['id'] = -1
                 print(json_data_remind)
-                appointment.update_appointment_reminder(json_data_remind['id'],json_data_remind["rappel"])
+                appointment.update_appointment_reminder(
+                    json_data_remind['id'], json_data_remind["rappel"])
                 server.send_to_all_clients(
                     "Whisper_remind data_OK")
                 tts.talk(
                     "c'est noté, ravis d'avoir pu vous aider")
                 appointment.reset_appointment_ids()
-                time.sleep(1)
-                server.send_to_all_clients("Whisper")
-
+                server.whisperState(
+                    "Ended")
 
     def handle_clients(self, server):
         inputs = [server.server_socket] + server.clients
@@ -211,7 +215,8 @@ class WSServerStateRunning(WSServerState):
                         if message:
                             # Traitez le message reçu ici
                             message = message.decode("utf-8")
-                            print("Message reçu :", message)
+                            if not message == "PING":
+                                print("Message reçu :", message)
                             server.received_messages.append(message)
                         else:
                             # Connexion fermée par le client
@@ -233,6 +238,9 @@ class WSServer:
         self.received_messages = []
         self.state = WSServerStateRunning()
         self.led_status = "Off_mode"
+        self.newStateWhisper = "NotStarted"
+        self.pc = False
+        self.LED = False
 
     def start(self):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -242,6 +250,18 @@ class WSServer:
         self.server_socket.listen(5)
         self.server_socket.setblocking(0)
         print("Serveur WebSocket démarré.")
+
+    def setID(self, id):
+        if id == "PC":
+            self.pc = True
+        if id == "LED":
+            self.LED = True
+
+    def checkID(self):
+        if self.pc and self.LED:
+            return True
+        else:
+            return False
 
     def handle_clients(self):
         self.state.handle_clients(self)
@@ -254,11 +274,13 @@ class WSServer:
         elif message == "Off_mode":
             self.set_led_status("Off_mode")
 
-        else :
-            print("status is not good")
+        else:
+            if not message == "LED_PONG":
+                print("status is not good")
         for client_socket in self.clients:
             try:
-                print("Message envoyé : " + message)
+                if not message == "LED_PONG":
+                    print("Message envoyé :", message)
                 client_socket.sendall(message.encode("utf-8"))
             except ConnectionResetError:
                 client_socket.close()
@@ -269,13 +291,25 @@ class WSServer:
         messages = self.received_messages.copy()
         self.received_messages.clear()
         return messages
+
     def set_led_status(self, status):
         self.led_status = status
+        if self.led_status == "Fade_mode":
+            self.send_to_all_clients("LED_fade")
+        if self.led_status == "Static_mode":
+            self.send_to_all_clients("LED_static")
+        if self.led_status == "Off_mode":
+            self.send_to_all_clients("LED_off")
         print(f'Setting status : {status}')
 
     def get_led_status(self):
-        print(f'Current status : {self.led_status}')
         return self.led_status
+
+    def whisperState(self, state=None):
+        if state:
+            self.newStateWhisper = state
+        return self.newStateWhisper
+
     def stop(self):
         for client_socket in self.clients:
             client_socket.close()
@@ -308,13 +342,12 @@ class WSClient:
             message = self.client_socket.recv(1024)
             if message:
                 return message.decode("utf-8")
-            
-        return None
 
-    
+        return None
 
     def get_id(self):
         return self.client_id
+
     def close(self):
         if self.client_socket:
             self.client_socket.close()

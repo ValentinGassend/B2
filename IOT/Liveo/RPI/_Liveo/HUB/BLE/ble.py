@@ -36,7 +36,8 @@ class BLE:
             try:
                 self.child.expect("Characteristic value was written successfully", timeout=5)
                 self.line = self.child.readline().decode()
-                print("Message envoyé :", message)
+                if not message =="LED_PONG":
+                    print("Message envoyé :", message)
             except pexpect.exceptions.TIMEOUT:
                 print("Échec de l'envoi du message.")
                 try:
@@ -55,14 +56,14 @@ class BLE:
                 try:
                     self.child.expect("Characteristic value was written successfully", timeout=5)
                     self.line = self.child.readline().decode()
-                    print("Message envoyé :", message)
+                    if not message =="LED_PONG":
+                        print("Message envoyé :", message)
                 except pexpect.exceptions.TIMEOUT:
                     print("Échec de l'envoi du message.")
                     try:
                         self.disconnect()
                     except:
                         pass
-                    self.connect()
 
     def receive_message(self):
         if self.connected:
@@ -95,7 +96,7 @@ class BLE:
                 
                 # ATTENTION IL FAUT MODIFIER LA DATA
                 # self.btn_value = int(content.split(":")[1].strip())
-                self.btn_value = int(10)
+                self.btn_value = int(1)
                 self.value_Retrived = True
                 if self.btn_value > 0 :
                     print(f"user trigger btn {self.btn_value} time")
