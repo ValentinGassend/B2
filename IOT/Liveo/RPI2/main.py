@@ -5,8 +5,11 @@ import time
 # Instanciation de la classe LedMode avec les couleurs des LED en argument
 led_mode = LedMode([Color(164, 193, 255, 0)])
 
+# server_address = '192.168.1.16'
+server_address = '192.168.43.242'
+server_port = 8081
 # Création de l'objet WSClient
-client = WSClient("192.168.1.16", 8082, "LED")
+client = WSClient(server_address, server_port, "LED")
 while True:
     try:
         client.connect()
@@ -18,7 +21,8 @@ while True:
                     received_message = client.receive_message()
                     
                     if received_message:
-                        print("Message reçu du serveur : " + received_message)
+                        if not received_message == "LED_PONG":
+                            print("Message reçu du serveur : " + received_message)
                         if received_message == "ID":
                             print("Message envoyé au serveur : '" + client.get_id() + "'")
                             client.send_message(client.get_id())
