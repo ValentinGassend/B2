@@ -1,29 +1,25 @@
-from WSClient import WSClient
+import websocket
 
-# Adresse IP et port du serveur
-server_address = '192.168.1.16'
-server_port = 8765
+address = '192.168.1.16'
+port = 8081
 
-# Création de l'instance du client
-client = WSClient(server_address, server_port)
+def on_message(ws, message):
+    print(f"Message reçu : {message}")
 
-# Connexion au serveur WebSocket
-client.connect()
-print("Connecté au serveur WebSocket.")
+def on_error(ws, error):
+    print(f"Erreur : {error}")
 
-# Boucle principale pour traiter les messages entrants
-while True:
-    # Envoi d'un message au serveur
-    message = input("Message à envoyer au serveur : ")
-    client.send_message(message)
+def on_close(ws):
+    print("Connexion WebSocket fermée")
 
-    # Réception de la réponse du serveur
-    response = client.receive_message()
-    print("Réponse du serveur :", response)
+def on_open(ws):
+    print("Connexion WebSocket ouverte")
+    ws.send("ID")
 
-    # Conditions de sortie de la boucle
-    if response == "Leave" or response is None:
-        break
-
-# Fermeture de la connexion
-client.close()
+websocket.enableTrace(True)
+ws = websocket.WebSocketApp(f"ws://{address}:{port}/",
+                            on_message=on_message,
+                            on_error=on_error,
+                            on_close=on_close)
+ws.on_open = on_open(ws)
+ws.run_forever()

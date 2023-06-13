@@ -22,8 +22,10 @@ class AppointmentManager:
         for appointment in appointments:
             appointment_date = datetime.strptime(appointment['date'], "%Y-%m-%d").date()
             appointment_time = datetime.strptime(appointment['heure'], "%H:%M").time()
-            reminder_date = datetime.strptime(appointment['rappel']['date'], "%Y-%m-%d").date()
-            reminder_time = datetime.strptime(appointment['rappel']['heure'], "%H:%M").time()
+            if appointment['rappel']['date']:
+                reminder_date = datetime.strptime(appointment['rappel']['date'], "%Y-%m-%d").date()
+            if appointment['rappel']['heure']:
+                reminder_time = datetime.strptime(appointment['rappel']['heure'], "%H:%M").time()
 
             if appointment_date == current_time.date() and appointment_time == current_time.time():
                 return appointment

@@ -32,6 +32,8 @@ class LedMode:
         self.fade_thread_stop = threading.Event()
         self.static_thread = threading.Thread(target=self.static_loop)
         self.static_thread_stop = threading.Event()
+        self.off_thread = threading.Thread(target=self.off_loop)
+        self.off_thread_stop = threading.Event()
         self.startedTime = time()
         self.firstTime = True
         if not isinstance(colors, list):
@@ -48,23 +50,41 @@ class LedMode:
             self.fade_thread_stop.set()  # Définit l'Event pour arrêter le thread de "static"
             if not self.fade_thread.is_alive():
                 self.fade_thread = threading.Thread(target=self.fade_loop)
+                self.static_thread_stop.set()
+                self.off_thread_stop.set()
                 self.fade_thread_stop.clear()
                 self.fade_thread.start()
         elif message == "LED_STATE":
             
             pass
         elif message == "LED_static":
+            if self.static_thread.is_alive():
+                self.static_thread_stop.set()
+                self.static_thread_stop.clear()
+                print(self.static_thread.is_alive())
             if not self.static_thread.is_alive():
                 self.static_thread = threading.Thread(target=self.static_loop)
                 self.static_thread_stop.clear()
+                self.off_thread_stop.set()
+                self.fade_thread_stop.set()
                 self.static_thread.start()
         elif message == "LED_off":
-            if not self.static_thread.is_alive():
-                self.static_thread = threading.Thread(target=self.off_loop)
-                self.static_thread_stop.clear()
-                self.static_thread.start()
+            if not self.off_thread.is_alive():
+                self.off_thread = threading.Thread(target=self.off_loop)
+                self.off_thread_stop.clear()
+                self.static_thread_stop.set()
+                self.fade_thread_stop.set()
+                self.off_thread.start()
+        else:
+            if not self.off_thread.is_alive():
+                self.off_thread = threading.Thread(target=self.off_loop)
+                self.off_thread_stop.clear()
+                self.static_thread_stop.set()
+                self.fade_thread_stop.set()
+                self.off_thread.start()
+
     def off_loop(self):
-        while not self.static_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
+        while not self.off_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
             self.ledOff()
 
     def ledOff(self, strip=None, delay_ms=5):
@@ -79,8 +99,7 @@ class LedMode:
             currentTime = time()
 
             if not self.nbrColor == len(self.colors):
-                strip.setBrightness(
-                    int(((((currentTime - self.startedTime) / delay_ms) * 1) - 255) * -1))
+                strip.setBrightness(0)
             else:
                 self.nbrColor = 0
         strip.show()
@@ -90,7 +109,7 @@ class LedMode:
         while not self.static_thread_stop.is_set():  # Vérifie si l'Event a été défini pour arrêter le thread
             self.static()
 
-    def static(self, strip=None, delay_ms=5):
+    def static(self, strip=None, delay_ms=1):
         if not strip:
             strip = self.strip_chill
         for j in range(256):
@@ -108,13 +127,15 @@ class LedMode:
                     else:
                         self.nbrColor = self.nbrColor + 1
                         self.startedTime = time()
-                        strip.setBrightness(0)
+                        strip.setBrightness(
+                    int(((((currentTime - self.startedTime) / delay_ms) * 1) - 255) * -1))
                 else:
                     self.nbrColor = 0
 
             strip.show()  # Afficher les pixels après chaque itération de la boucle j
 
             if currentTime - self.startedTime >= delay_ms:
+                self.handle_message("LED_off")
                 break  # Sortir de la boucle j si le délai spécifié est atteint
 
         self.led_status = "Static_mode"  # Met à jour l'état des LEDs

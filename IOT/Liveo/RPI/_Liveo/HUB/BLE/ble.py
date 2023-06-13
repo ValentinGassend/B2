@@ -1,6 +1,7 @@
 import pexpect
 import time
 
+
 class BLE:
     def __init__(self):
         self.child = pexpect.spawn("gatttool -I")
@@ -8,7 +9,7 @@ class BLE:
         self.connected = False
         self.line = ""
         self.btn_value = None
-        self.value_Retrived = False
+        self.value_Retrieved = False
 
     def connect(self):
         if not self.connected:
@@ -32,11 +33,14 @@ class BLE:
     def send_message(self, message):
         if self.connected:
             encoded_message = message.encode("ascii").hex()
-            self.child.sendline("char-write-req 0x0018 {}".format(encoded_message))
+            self.child.sendline(
+                "char-write-req 0x0018 {}".format(encoded_message))
             try:
-                self.child.expect("Characteristic value was written successfully", timeout=5)
+                self.child.expect(
+                    "Characteristic value was written successfully", timeout=5)
                 self.line = self.child.readline().decode()
-                print("Message envoyé :", message)
+                if not message == "LED_PONG":
+                    print("Message envoyé :", message)
             except pexpect.exceptions.TIMEOUT:
                 print("Échec de l'envoi du message.")
                 try:
@@ -51,18 +55,20 @@ class BLE:
             self.connect()
             if self.connected:
                 encoded_message = message.encode("ascii").hex()
-                self.child.sendline("char-write-req 0x0018 {}".format(encoded_message))
+                self.child.sendline(
+                    "char-write-req 0x0018 {}".format(encoded_message))
                 try:
-                    self.child.expect("Characteristic value was written successfully", timeout=5)
+                    self.child.expect(
+                        "Characteristic value was written successfully", timeout=5)
                     self.line = self.child.readline().decode()
-                    print("Message envoyé :", message)
+                    if not message == "LED_PONG":
+                        print("Message envoyé :", message)
                 except pexpect.exceptions.TIMEOUT:
                     print("Échec de l'envoi du message.")
                     try:
                         self.disconnect()
                     except:
                         pass
-                    self.connect()
 
     def receive_message(self):
         if self.connected:
@@ -71,129 +77,55 @@ class BLE:
             except:
                 print('not able to read lines')
             if "value:" in self.line:
-                    hex_data = self.line.split("value: ")[1].strip()
-                    byte_array = bytearray.fromhex(hex_data)
-                    received_message = byte_array.decode("utf-8")
-                    if received_message:
-                        self.handle_message(received_message)
+                hex_data = self.line.split("value: ")[1].strip()
+                byte_array = bytearray.fromhex(hex_data)
+                received_message = byte_array.decode("utf-8")
+                return received_message
             else:
-                print("Aucune notification reçue.")
-                self.disconnect()
-        else:
-            print("Pas de connexion BLE établie.")
-            self.disconnect()
 
-    def check_connection(self):
+                print("Aucune notification reçue.")
+                return False
+        else:
+            return None
+
+    def is_connected(self):
         return self.connected
-    
+
     def handle_message(self, content):
         if content == "Hi client!":
-            print("Serveur know who i am :)")
+            print("Serveur know who I am :)")
             self.send_message("Waiting Data")
         elif content.strip().startswith("pressed_value:"):
             try:
-                
                 # ATTENTION IL FAUT MODIFIER LA DATA
                 # self.btn_value = int(content.split(":")[1].strip())
-                self.btn_value = int(10)
-                self.value_Retrived = True
-                if self.btn_value > 0 :
+                self.btn_value = int(1)
+                self.value_Retrieved = True
+                if self.btn_value > 0:
                     print(f"user trigger btn {self.btn_value} time")
                     self.send_message("delete_data")
                     self.disconnect()
-                else: 
+                    return True
+                else:
                     print("data is empty")
                     self.disconnect()
+                    return True
             except (ValueError, IndexError):
                 print("Invalid message format")
+                return False
         elif content == "No data available" or content == "Data deleted":
             # self.disconnect()
             # print("Disconnected")
             pass
 
-    def check_btn_value(self):
+    def get_btn_value(self):
         return self.btn_value
-    
-    def check_value_retrive(self):
-        return self.value_Retrived
-    
-    def reset_value_retrive(self):
-        self.value_Retrived = False
-    
 
-class State:
-    def check_connection(self, ble):
-        raise NotImplementedError()
+    def is_value_retrieved(self):
+        return self.value_Retrieved
 
-    def check_acknowledge(self, ble):
-        raise NotImplementedError()
-
-    def launch(self, ble):
-        raise NotImplementedError()
-
-    def disconnect(self, ble):
-        raise NotImplementedError()
-
-    def write_data(self, ble):
-        raise NotImplementedError()
-
-
-class ConnectedState(State):
-    def check_connection(self, ble):
-        return True
-
-    def check_acknowledge(self, ble):
-        pass
-
-    def launch(self, ble):
-        print("BLE is already connected")
-
-    def disconnect(self, ble):
-        ble.child.sendline("disconnect")
-        ble.child.expect("disconnect successfully", timeout=60)
-        ble.connected = False
-        ble.change_state(DisconnectedState())
-
-    def write_data(self, ble):
-        pass
-
-
-class ConnectingState(State):
-    def check_connection(self, ble):
-        return False
-
-    def check_acknowledge(self, ble):
-        pass
-
-    def launch(self, ble):
-        print("BLE is already connecting")
-
-    def disconnect(self, ble):
-        ble.child.sendline("disconnect")
-        ble.child.expect("disconnect successfully", timeout=60)
-        ble.connected = False
-        ble.change_state(DisconnectedState())
-
-    def write_data(self, ble):
-        pass
-
-
-class DisconnectedState(State):
-    def check_connection(self, ble):
-        return False
-
-    def check_acknowledge(self, ble):
-        pass
-
-    def launch(self, ble):
-        ble.check_connection()
-        ble.change_state(ConnectingState())
-
-    def disconnect(self, ble):
-        print("BLE is already disconnected")
-
-    def write_data(self, ble):
-        pass
+    def reset_value_retrieved(self):
+        self.value_Retrieved = False
 
 
 def check_BLE_connection(ble_obj, nb_try=3):
@@ -203,12 +135,12 @@ def check_BLE_connection(ble_obj, nb_try=3):
         if counter >= nb_try:
             print("Connection Failed")
             return False
-        if ble_obj.check_connection():
+        if ble_obj.is_connected():
             print("Connected")
             return True
         counter += 1
         if not launched:
-            ble_obj.launch()
+            ble_obj.connect()
             launched = True
         print("Failed, retry ({})".format(counter))
 

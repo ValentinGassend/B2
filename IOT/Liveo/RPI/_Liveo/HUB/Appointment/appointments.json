@@ -26,14 +26,14 @@
     },
     {
       "id": 2,
-      "date": "2023-05-19",
-      "heure": "18:00",
-      "lieu": "rendez-vous chez le m\u00e9decin",
-      "titre": "",
-      "informations_supplementaires": "",
+      "date": "2023-06-10",
+      "heure": "12:00",
+      "lieu": "Salle de r\u00e9union C",
+      "titre": "R\u00e9union d'\u00e9quipe",
+      "informations_supplementaires": "Discussion des prochaines \u00e9tapes du projet.",
       "rappel": {
-        "date": "2023-05-19",
-        "heure": "17:30"
+        "date": "2023-06-10",
+        "heure": "11:30"
       }
     },
     {
