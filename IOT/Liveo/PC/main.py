@@ -9,7 +9,7 @@ neverStarted = True
 
 
 server_address = '192.168.43.242'
-server_port = 8081
+server_port = 8082
 
 # Création de l'instance du client
 client = WSClient(server_address, server_port)
@@ -75,10 +75,7 @@ while True:
         my_assistant_RDV.start()
 
     if response == "Whisper_rdv data_OK":
-        my_assistant_RDV.close()
-        client.send_message("Whisper_rdv nextCommand")
-
-    if response == "Whisper Bool":
+        my_assistant_RDV.close() 
         my_assistant_bool.start()
 
     if response == "Whisper_bool data_notOK":
@@ -87,9 +84,6 @@ while True:
 
     if response == "Whisper_bool data_OK":
         my_assistant_bool.close()
-        client.send_message("Whisper_bool nextCommand")
-
-    if response == "Whisper Remind":
         my_assistant_remind.start()
 
     if response == "Whisper_remind data_notOK":

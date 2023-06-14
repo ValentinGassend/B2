@@ -7,12 +7,13 @@ from RFID.rfid import RfidTrigger
 from BLE.ble import BLE, check_BLE_is_ready
 from buttonFileCount.btn_file_count import ButtonPressCounter
 import json
+from btn.btn import Btn
 from TTS.tts import TTS
 from NLU.nlu import Nlu
 import threading
 address = '192.168.43.242'
 # address = '192.168.1.16'
-port = 8081
+port = 8082
 server = WSServer(address, port)
 
 # Configuration du gestionnaire de rendez-vous
@@ -21,7 +22,8 @@ manager = AppointmentManager(
 
 # Configuration de la LED fade (à adapter selon votre utilisation)
 led_fade_duration = 1  # Durée de la LED fade en secondes
-
+button_pin = 10
+my_btn = Btn(button_pin)
 base_time = time.time()  # Remplacez par votre temps de base
 next_time = base_time
 # Lancement du serveur dans un thread séparé
@@ -54,15 +56,18 @@ firstLunchDelay = True
 Speaker = TTS()
 
 nlu = Nlu()
-# nlu.fit()
+
 server_thread = Thread(target=run_server)
 server_thread.start()
-
-
+print("server is ready")
+# nlu.fit()
 # Classe de base pour les états du hub
+
+
 class HubState:
     def __init__(self):
-        self.message = ""
+        self.message = None
+        self.previous_message = None
 
     def handle_message(self, hub, message):
         if not message == "PING":
@@ -70,6 +75,7 @@ class HubState:
         self.message = message
 
     def get_received_message(self):
+        print("message", self.message)
         return self.message
 
     def handle_rfid_trigger(self, hub):
@@ -105,12 +111,17 @@ class StandbyState(HubState):
     def handle_self_state(self, hub):
         pass
 
+    def send_message_via_websocket(self, hub, message):
+        # Code pour envoyer un message via WebSocket
+        server.send_to_all_clients(message)
+
 
 class TestState(HubState):
     def __init__(self):
-        self.message = ""
+        self.message = None
         self.led = False
         self.pc = False
+        self.previous_message = None
 
     def handle_rfid_trigger(self, hub):
         pass
@@ -173,8 +184,9 @@ class TestState(HubState):
 # Implémentation de l'état de récupération d'information
 class RecoveryState(HubState):
     def __init__(self):
-        self.message = ""
+        self.message = None
         self.bluetooth_connected = False
+        self.previous_message = None
 
     def handle_rfid_trigger(self, hub):
         print("Erreur : Impossible de rester dans l'état actuel")
@@ -193,8 +205,11 @@ class RecoveryState(HubState):
 
     def launch_bluetooth(self, hub):
         # Code pour lancer le Bluetooth
-        ble_client.connect()
+        # ble_client.connect()
         self.bluetooth_connected = ble_client.is_connected()
+        while not self.bluetooth_connected:
+            ble_client.connect()
+            self.bluetooth_connected = ble_client.is_connected()
 
     def communicate_with_ble(self, hub):
         if self.bluetooth_connected:
@@ -355,6 +370,14 @@ class ButtonTriggerState(HubState):
     def handle_button_trigger(self, hub):
         print("Erreur : Impossible de rester dans l'état de déclenchement de bouton")
 
+    def launch_tts(self, hub, file):
+        # Lancement du TTS en mode lecture de fichier audio
+        Speaker.sound(file)
+
+    def speak_text(self, hub, text):
+        # Lancement du TTS en mode lecture de texte
+        Speaker.talk(text)
+
 
 # Implémentation de l'état de mode rappel
 class ReminderModeState(HubState):
@@ -370,11 +393,33 @@ class ReminderModeState(HubState):
     def handle_reminder(self, hub):
         print("Erreur : Impossible de rester dans l'état de mode rappel")
 
+    def launch_tts(self, hub, file):
+        # Lancement du TTS en mode lecture de fichier audio
+        Speaker.sound(file)
+
+
+class WhisperState(HubState):
+    def handle_rfid_trigger(self, hub):
+        pass
+
+    def handle_button_trigger(self, hub):
+        pass
+
+    def handle_reminder(self, hub):
+        pass
+
+    def handle_standby(self, hub):
+        hub.set_state(StandbyState())
+
+    def handle_self_state(self, hub):
+        pass
+
 
 # Classe principale du hub
 class Hub:
     def __init__(self):
-        self.message = ""
+        self.message = None
+        self.previous_message = None
         self.state = TestState()
 
     def set_state(self, state):
@@ -389,7 +434,7 @@ class Hub:
         self.state.handle_message(self, message)
 
     def get_received_message(self):
-        self.state.get_received_message()
+        return self.state.get_received_message()
 
     def handle_rfid_trigger(self):
         self.state.handle_rfid_trigger(self)
@@ -443,98 +488,158 @@ class Hub:
 hub = Hub()
 # server.handle_clients()
 # # Exemple de scénarios
-while not hub.websocket_connexion():
-    pass
+# while not hub.websocket_connexion():
+#     pass
 
 
 hub.handle_standby()
+# Durée en secondes pour les 8 minutes
+duration = 8 * 60
+# Temps de départ
 
+start_time = time.time()  # Remplacez par votre temps de base
+next_time = start_time
+time.sleep(1)
+standbyInit = False
+cardReader = True
 while True:
     if isinstance(hub.get_state(), StandbyState):
         rfid_trigger.read()  # This will run indefinitely
         card_state = rfid_trigger.get_state()
+
+        is_intro_executed = False
+        rfid_trigger.read()  # This will run indefinitely
+        card_state = rfid_trigger.get_state()
+        if not card_state:
+            standbyInit = False
+            cardReader = True
+        if standbyInit:
+            cardReader = False
         print(card_state)
+        my_btn.checking_state()
+        button_state = my_btn.pressed
 
-        if card_state:
+        if button_state:
+            hub.handle_button_trigger()
+
+        if card_state and cardReader:
             hub.handle_rfid_trigger()
-            pass
 
-        else:
-            pass
+        current_time = datetime.now()  # Obtenir le temps actuel
+
+        if time.time() > next_time:
+            # Vérifier s'il y a un rappel à la temporalité actuelle
+            current_appointment = manager.check_appointment(current_time)
+            if current_appointment:
+                hub.handle_reminder()
+            else:
+                for i in range(10):
+                    target_time = current_time + timedelta(minutes=i)
+                    appointment_exists = manager.check_appointment(target_time)
+                    if appointment_exists:
+                        hub.handle_reminder()
+            base_time = time.time()
+
+            # Attendre 1 minute avant la prochaine vérification
+            next_time = base_time + 60
     elif isinstance(hub.get_state(), RecoveryState):
-        hub.launch_bluetooth()
-        btn_value = hub.communicate_with_ble()
+
+        if not is_intro_executed:
+            firstpart = True
+            secondpart = True
+            thirdpart = True
+            fourpart = True
+            # hub.launch_bluetooth()
+            # btn_value = hub.communicate_with_ble()
+            btn_value = 0
+
         if btn_value is not None and btn_value > 0:
-            hub.launch_tts(
-                "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Digital-bell.wav")
-            hub.speak_text("Bonjour ! Il semblerait que vous ayez pris " +
-                           str(btn_value)+" rendez-vous aujourd’hui. Commençons.")
-            hub.send_message_via_websocket("Whisper")
-            received_message = hub.communicate_via_websocket(
-                expected_message="Hello, WebSocket!")
-            print("Message reçu:", received_message)
-            if received_message.split("Rdv#", 1)[0] == "PC Whisper":
+            if not is_intro_executed:
+                hub.launch_tts(
+                    "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Digital-bell.wav")
+                hub.speak_text("Bonjour ! Il semblerait que vous ayez pris " +
+                               str(btn_value) + " rendez-vous aujourd’hui. Commençons.")
+                hub.send_message_via_websocket("Whisper")
+                is_intro_executed = True
+            received_message = hub.get_received_message()
+            while not received_message:
+                received_message = hub.get_received_message()
+
+            if received_message.startswith("PC WhisperRdv#"):
+                print("###################    Rdv#   #####################")
                 value = received_message.split("Rdv#", 1)[1]
+                received_message = None
+
                 intent = "rdv"
-                # ATTENTION ACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
                 nlu_result = hub.run_nlu(
                     text="je souhaite prendez un rendez-vous chez le médecin le 19 mai à 18h", intent=intent)
-                # nlu_result = hub.run_nlu(text=value, intent="rdv")
                 if not nlu_result:
                     hub.speak_text("Je n'ai pas bien compris votre réponse")
                     hub.send_message_via_websocket("Whisper_rdv data_notOK")
-                else:
+
+                elif firstpart:
+                    firstpart = False
                     appointment = hub.add_appointment(nlu_result, intent)
-                    hub.speak_text("Vous avez un "+appointment['titre']+appointment['lieu']+" à " +
-                                   appointment['heure']+" le "+appointment['date']+". Est-ce correct ?")
+                    hub.speak_text("Vous avez un " + appointment['titre'] + " " + appointment['lieu'] +
+                                   " à " + appointment['heure'] + " le " + appointment['date'] + ". Est-ce correct ?")
                     hub.send_message_via_websocket("Whisper_rdv data_OK")
-                    received_message = hub.communicate_via_websocket(
-                        expected_message="Whisper_rdv nextCommand")
-                    if received_message == "Whisper_rdv nextCommand":
-                        hub.send_message_via_websocket("Whisper Bool")
-                        received_message = hub.communicate_via_websocket(
-                            expected_message="Whisper_rdv nextCommand")
-                        if received_message.split("Bool#", 1)[0] == "PC Whisper":
-                            value = received_message.split("Bool#", 1)[1]
-                            intent = "bool"
-                            # ATTENTION ACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
-                            nlu_result = hub.run_nlu(text="Oui", intent=intent)
-                            # nlu_result = hub.run_nlu(text=value, intent="rdv")
-                            if not nlu_result:
-                                hub.speak_text(
-                                    "Je n'ai pas bien compris votre réponse, répétez votre rendez-vous s'il vous plait.")
-                                hub.send_message_via_websocket(
-                                    "Whisper_bool data_notOK")
-                            else:
-                                hub.send_message_via_websocket(
-                                    "Whisper_bool data_OK")
-                                received_message = hub.communicate_via_websocket(
-                                    expected_message="Whisper_bool nextCommand")
-                                if received_message == "Whisper_bool nextCommand":
-                                    hub.speak_text(
-                                        "Très bien, à quelle heure souhaitez-vous avoir un rappel de votre rendez-vous ?")
-                                    hub.send_message_via_websocket(
-                                        "Whisper Remind")
-                                    received_message = hub.communicate_via_websocket(
-                                        expected_message="Whisper_bool nextCommand")
-                                    if received_message.split("Remind#", 1)[0] == "PC Whisper":
-                                        value = received_message.split(
-                                            "Remind#", 1)[1]
-                                        intent = "remind"
-                                        # ATTENTION ACTIVER CAR TRAITEMENT IMPOSSIBLE POUR LE MOMENT
-                                        nlu_result = hub.run_nlu(
-                                            text="Je veux mettre un rappel pour ma consultation le 5 septembre à 9h", intent=intent)
-                                        # nlu_result = hub.run_nlu(text=value, intent="rdv")
-                                        if not nlu_result:
-                                            hub.speak_text(
-                                                "Je n'ai pas compris votre réponse, pouvez-vous répéter l'heure de votre rappel ?")
-                                            hub.send_message_via_websocket(
-                                                "Whisper_remind data_notOK")
-                                        else:
-                                            appointment_reminder = hub.update_appointment_reminder(
-                                                nlu_result, intent)
-                                            hub.send_message_via_websocket(
-                                                "Whisper_remind data_OK")
-                                            hub.speak_text(
-                                                "c'est noté, ravis d'avoir pu vous aider")
-                                            hub.handle_rfid_trigger()
+            elif received_message.startswith("PC WhisperBool#"):
+                print("###################    Bool#   #####################")
+                value = received_message.split("Bool#", 1)[1]
+                intent = "bool"
+                nlu_result = hub.run_nlu(text="oui", intent=intent)
+                if not nlu_result:
+                    hub.speak_text(
+                        "Je n'ai pas bien compris votre réponse, répétez votre rendez-vous s'il vous plaît.")
+                    hub.send_message_via_websocket("Whisper_bool data_notOK")
+                    received_message = None
+                elif secondpart:
+                    secondpart = False
+                    hub.speak_text(
+                        "Très bien, à quelle heure souhaitez-vous avoir un rappel de votre rendez-vous ?")
+                    hub.send_message_via_websocket("Whisper_bool data_OK")
+                    received_message = None
+            elif received_message.startswith("PC WhisperRemind#"):
+                print("###################    Remind#   #####################")
+
+                value = received_message.split("Remind#", 1)[1]
+                intent = "remind"
+                nlu_result = hub.run_nlu(
+                    text="Rappelle-moi de fixer un rendez-vous avec mon avocat le 27 juin à 17h", intent=intent)
+                if not nlu_result:
+                    hub.speak_text(
+                        "Je n'ai pas compris votre réponse, pouvez-vous répéter l'heure de votre rappel ?")
+                    hub.send_message_via_websocket("Whisper_remind data_notOK")
+                    received_message = None
+                elif thirdpart:
+                    thirdpart = False
+                    appointment_reminder = hub.update_appointment_reminder(
+                        nlu_result, intent)
+                    hub.send_message_via_websocket("Whisper_remind data_OK")
+                    hub.speak_text("C'est noté, ravi d'avoir pu vous aider")
+                    received_message = None
+                    btn_value = btn_value-1
+
+        else:
+            standbyInit = True
+            hub.handle_standby()
+    elif isinstance(hub.get_state(), ButtonTriggerState):
+        hub.speak_text("Bonjour, comment puis-je vous aider ?")
+        pass
+    elif isinstance(hub.get_state(), ReminderModeState):
+        current_time = time.time()
+        if current_time - start_time >= duration:
+            hub.launch_tts(
+                "/home/valentin/Desktop/MemoRoom/modules/_Liveo/TTS/Echo.wav")
+            start_time = time.time()
+
+        my_btn.checking_state()
+        button_state = my_btn.pressed
+        if button_state:
+            hub.launch_tts(
+                "/home/valentin/Desktop/MemoRoom/modules/_Liveo/TTS/Digital-bell.wav")
+            if appointment_exists:
+                pass
+            elif current_appointment:
+                pass
+            pass  # Sortir de la boucle dès qu'un rendez-vous est trouvé

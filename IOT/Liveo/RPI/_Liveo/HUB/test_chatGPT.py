@@ -30,7 +30,7 @@ def run_server():
         server.stop()
 
 nlu = Nlu()
-nlu.fit()
+# nlu.fit()
 server_thread = Thread(target=run_server)
 server_thread.start()
 manager = AppointmentManager()

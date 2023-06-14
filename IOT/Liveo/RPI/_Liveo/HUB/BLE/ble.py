@@ -39,7 +39,6 @@ class BLE:
                 self.child.expect(
                     "Characteristic value was written successfully", timeout=5)
                 self.line = self.child.readline().decode()
-
                 if not message == "LED_PONG":
                     print("Message envoyé :", message)
             except pexpect.exceptions.TIMEOUT:
