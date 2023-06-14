@@ -11,8 +11,8 @@ from btn.btn import Btn
 from TTS.tts import TTS
 from NLU.nlu import Nlu
 import threading
-address = '192.168.43.242'
-# address = '192.168.1.16'
+# address = '192.168.43.242'
+address = '192.168.1.16'
 port = 8082
 server = WSServer(address, port)
 
