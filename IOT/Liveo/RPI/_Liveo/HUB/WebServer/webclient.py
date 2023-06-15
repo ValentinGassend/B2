@@ -8,7 +8,8 @@ class WebSocketClient:
 
         @self.sio.event
         def connect():
-            self.connected = True # Envoyer le message lorsque la connexion est établie
+            self.connected = True 
+            self.send_message('Init')# Envoyer le message lorsque la connexion est établie
 
         @self.sio.event
         def disconnect():

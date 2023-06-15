@@ -238,6 +238,12 @@
       text-transform: lowercase;
       color: #333896;
     }
+    .wave {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.2.0/socket.io.min.js"></script>
   <script>
@@ -305,7 +311,7 @@
     //     cancelFullScreen.call(doc);
     //   }
     // }
-    var socket = io.connect('http://192.168.1.16:3000/');
+    var socket = io.connect('http://192.168.43.242:3000/');
     console.log("Consoled");
     socket.on('update', function (message) {
       console.log(message)
@@ -634,25 +640,25 @@
     <h1 class="meetingTitle"></h1>
   </div>
   <!-- (current index) / (len total) -->
-  <h4 class="head">1/2</h4>
+  <h4 class="head"></h4>
   <div class="sub">
     <!-- date -->
     <h3 class="date"></h3>
     <h3 class="connectState"></h3>
     <!-- title + time -->
-    <h3 class="reminderInfo">Visite médicale à 10H30</h3>
+    <h3 class="reminderInfo"></h3>
     <!-- title -->
-    <h3 class="resumeInfo">Marche avec Claire</h3>
+    <h3 class="resumeInfo"></h3>
     <div class="meetingInfo">
       <!-- date -->
       <div class="meetingInfo-date">
         <img src="{{ logo_date }}" alt="icone de la date">
-        <h3 class="meetingInfo-date-text">Jeudi 1 juin 2023</h3>
+        <h3 class="meetingInfo-date-text"></h3>
       </div>
       <!-- time -->
       <div class="meetingInfo-time">
         <img src="{{ logo_time }}" alt="icone de l'heure">
-        <h3 class="meetingInfo-time-text">10H30</h3>
+        <h3 class="meetingInfo-time-text"></h3>
       </div>
     </div>
   </div>
@@ -660,6 +666,8 @@
     <!-- additionnal info -->
     <p class="meetingInfo-more"></p>
   </div>
+  
+  <img class="wave" src="{{ wave }}" alt="">
 </body>
 
 </html>
