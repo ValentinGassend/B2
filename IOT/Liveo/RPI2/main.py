@@ -1,58 +1,32 @@
-from Led_Strip.led import LedMode
-from rpi_ws281x import Color
+# Import des classes et fonctions nécessaires
 from Websocket.WebsocketManager import WSClient
-import time
-# Instanciation de la classe LedMode avec les couleurs des LED en argument
-led_mode = LedMode([Color(164, 193, 255, 0)])
+from Led_Strip.led import LedMode
 
-# server_address = '192.168.1.16'
-server_address = '192.168.43.242'
+# Adresse et port du serveur WebSocket
+server_address = '192.168.1.16'
 server_port = 8081
-# Création de l'objet WSClient
-client = WSClient(server_address, server_port, "LED")
-while True:
-    try:
-        client.connect()
-        print("Connected to the WebSocket server.")
-        
-        while True:
-            try:
-                if client.is_server_active():
-                    received_message = client.receive_message()
-                    
-                    if received_message:
-                        if not received_message == "LED_PONG":
-                            print("Message reçu du serveur : " + received_message)
-                        if received_message == "ID":
-                            print("Message envoyé au serveur : '" + client.get_id() + "'")
-                            client.send_message(client.get_id())
-                        if received_message == "LED_STATE":
-                            print("Message envoyé au serveur : '" + led_mode.get_led_status() + "'")
-                            client.send_message(led_mode.get_led_status())
-                        
-                        if received_message.startswith("LED_"):
-                            led_mode.handle_message(received_message)
-                    else:
-                        pass
-            except KeyboardInterrupt:
-                # Fermer la connexion client lorsqu'on appuie sur Ctrl+C
-                client.close()
-                break
-            except BrokenPipeError:
-                print("La connexion au serveur a été interrompue. Reconnexion...")
-                client.close()
-                time.sleep(1)
-            except ConnectionRefusedError:
-                print("La connexion au serveur a été interrompue. Reconnexion...")
-                time.sleep(1)
-                
-        # Retry the connection after the inner loop breaks
-        continue
-        
-    except KeyboardInterrupt:
-        break
-    except ConnectionRefusedError:
-        print("La connexion au serveur a été interrompue. Reconnexion...")
-        time.sleep(1)
+from rpi_ws281x import Color
+# Création d'une instance du client WebSocket
+websocket_client = WSClient(server_address, server_port, "LED")
+LedManager = LedMode()
+# Connexion au serveur WebSocket
+websocket_client.connect()
 
-print("Program terminated.")
+# Boucle principale du client
+while True:
+    # Envoi d'un message au serveur WebSocket pour demander le mode de LED actuel
+    # websocket_client.send_message('LED_MODE')
+
+    # Réception de la réponse du serveur WebSocket
+    response = websocket_client.receive_message()
+    print('Mode de LED actuel :', response)
+    if not response =="LED_static_2":
+        LedManager.handle_message(response)
+    else :
+        LedManager.handle_message(response,2)
+
+    # Pause entre chaque vérification du mode de LED
+    # time.sleep(1)
+
+# Fermeture de la connexion au serveur WebSocket
+websocket_client.close()

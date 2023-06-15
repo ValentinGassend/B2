@@ -14,9 +14,10 @@ from btn.btn import Btn
 from TTS.tts import TTS
 from NLU.nlu import Nlu
 import threading
+import locale
 # address = '192.168.43.242'
 address = '192.168.1.16'
-port = 8082
+port = 8081
 webport = 3000
 server = WSServer(address, port)
 myWebServeur = WebServer(address, webport)
@@ -68,7 +69,6 @@ nlu = Nlu()
 server_thread = Thread(target=run_server)
 server_thread.start()
 print("server is ready")
-# nlu.fit()
 # Classe de base pour les états du hub
 
 
@@ -100,7 +100,6 @@ class HubState:
     
     def send_web_message(self, message):
         if client.isConnected():
-            print(message)
             # Vous pouvez placer d'autres actions ici avant d'envoyer un message
             client.send_message(message)
 
@@ -372,8 +371,6 @@ class RecoveryState(HubState):
 
 # Implémentation de l'état de déclenchement de bouton
 class ButtonTriggerState(HubState):
-    def handle_message(self, hub, message, client_socket, tts, nlu, appointment):
-        print("Erreur : Impossible de traiter les messages en dehors de l'état de veille")
 
     def handle_reminder(self, hub):
         print("Erreur : Impossible de passer en mode rappel en dehors de l'état de veille")
@@ -392,11 +389,13 @@ class ButtonTriggerState(HubState):
         # Lancement du TTS en mode lecture de texte
         Speaker.talk(text)
 
+    def send_message_via_websocket(self, hub, message):
+        # Code pour envoyer un message via WebSocket
+        server.send_to_all_clients(message)
 
 # Implémentation de l'état de mode rappel
 class ReminderModeState(HubState):
-    def handle_message(self, hub, message, client_socket, tts, nlu, appointment):
-        print("Erreur : Impossible de traiter les messages en dehors de l'état de veille")
+
 
     def handle_button_trigger(self, hub):
         print("Erreur : Impossible de passer en mode déclenchement de bouton en dehors de l'état de veille")
@@ -410,6 +409,23 @@ class ReminderModeState(HubState):
     def launch_tts(self, hub, file):
         # Lancement du TTS en mode lecture de fichier audio
         Speaker.sound(file)
+        
+    def send_message_via_websocket(self, hub, message):
+        # Code pour envoyer un message via WebSocket
+        server.send_to_all_clients(message)
+
+    def speak_text(self, hub, text):
+        # Lancement du TTS en mode lecture de texte
+        Speaker.talk(text)
+
+    def run_nlu(self, hub, text, intent):
+        if intent == "bool":
+            nlu_bool = nlu.run(text=text, intent=intent)
+            intent_name = nlu_bool['intent']['intentName']
+            if intent_name == None :
+                return False
+            else:
+                return intent_name
 
 
 class WhisperState(HubState):
@@ -508,7 +524,8 @@ hub = Hub()
 # while not hub.websocket_connexion():
 #     pass
 
-
+hub.send_web_message("Init")
+# nlu.fit()
 hub.handle_standby()
 # Durée en secondes pour les 8 minutes
 duration = 8 * 60
@@ -516,12 +533,14 @@ duration = 8 * 60
 
 start_time = time.time()  # Remplacez par votre temps de base
 next_time = start_time
-time.sleep(1)
+# time.sleep(10)
 standbyInit = False
 cardReader = True
+locale.setlocale(locale.LC_TIME, 'fr_FR.UTF-8')
 while True:
     if isinstance(hub.get_state(), StandbyState):
-        hub.send_web_message("Default")
+        hub.send_web_message("Connected")
+        # hub.send_web_message("Default")
         rfid_trigger.read()  # This will run indefinitely
         card_state = rfid_trigger.get_state()
 
@@ -543,11 +562,12 @@ while True:
             hub.send_web_message("Connecting")
             hub.handle_rfid_trigger()
 
-        current_time = datetime.now()  # Obtenir le temps actuel
+        current_time = datetime.now() # Obtenir le temps actuel
 
         if time.time() > next_time:
             # Vérifier s'il y a un rappel à la temporalité actuelle
             current_appointment = manager.check_appointment(current_time)
+            # current_appointment = manager.check_appointment(datetime.strptime("2023-05-27 14:00", "%Y-%m-%d %H:%M"))
             if current_appointment:
                 hub.handle_reminder()
             else:
@@ -570,10 +590,12 @@ while True:
             # hub.launch_bluetooth()
             # btn_value = hub.communicate_with_ble()
             
-            btn_value = 0
+            btn_value = 1
         
         if btn_value is not None and btn_value > 0:
             if not is_intro_executed:
+                
+                hub.send_message_via_websocket("LED_static")
                 hub.launch_tts(
                     "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Digital-bell.wav")
                 hub.speak_text("Bonjour ! Il semblerait que vous ayez pris " +
@@ -591,7 +613,7 @@ while True:
 
                 intent = "rdv"
                 nlu_result = hub.run_nlu(
-                    text="je souhaite prendez un rendez-vous chez le médecin le 19 mai à 18h", intent=intent)
+                    text=value, intent=intent)
                 if not nlu_result:
                     hub.speak_text("Je n'ai pas bien compris votre réponse")
                     hub.send_message_via_websocket("Whisper_rdv data_notOK")
@@ -606,7 +628,7 @@ while True:
                 print("###################    Bool#   #####################")
                 value = received_message.split("Bool#", 1)[1]
                 intent = "bool"
-                nlu_result = hub.run_nlu(text="oui", intent=intent)
+                nlu_result = hub.run_nlu(text=value, intent=intent)
                 if not nlu_result:
                     hub.speak_text(
                         "Je n'ai pas bien compris votre réponse, répétez votre rendez-vous s'il vous plaît.")
@@ -624,7 +646,7 @@ while True:
                 value = received_message.split("Remind#", 1)[1]
                 intent = "remind"
                 nlu_result = hub.run_nlu(
-                    text="Rappelle-moi de fixer un rendez-vous avec mon avocat le 27 juin à 17h", intent=intent)
+                    text=value, intent=intent)
                 if not nlu_result:
                     hub.speak_text(
                         "Je n'ai pas compris votre réponse, pouvez-vous répéter l'heure de votre rappel ?")
@@ -643,23 +665,83 @@ while True:
             standbyInit = True
             hub.handle_standby()
     elif isinstance(hub.get_state(), ButtonTriggerState):
-        hub.speak_text("Bonjour, comment puis-je vous aider ?")
+        if not is_intro_executed:
+            hub.send_message_via_websocket("LED_static_2")
+            hub.speak_text("Bonjour, comment puis-je vous aider ?")
+            is_intro_executed=True
+        
+        my_btn.checking_state()
+        button_state = my_btn.pressed
+
+        if button_state:
+            hub.handle_standby()
+            hub.send_message_via_websocket("LED_off")
+            time.sleep(1)
         # hub.send_web_message({"title": "Suppressed"})
         pass
     elif isinstance(hub.get_state(), ReminderModeState):
+        appointment = manager.get_reminder_apointment()
+        # hub.send_web_message()
         current_time = time.time()
+        if not is_intro_executed:
+            btn_was_pressed=False
+            hub.send_message_via_websocket("LED_fade")
+            is_intro_executed=True
+            waiting_data=False
+            print(appointment)
+            difference_temps = datetime.strptime(appointment['heure'], "%H:%M") - datetime.strptime(datetime.now().strftime("%H:%M"), "%H:%M")
+            hub.launch_tts(
+                "/home/valentin/Desktop/MemoRoom/modules/_Liveo/TTS/Echo.wav")
         if current_time - start_time >= duration:
             hub.launch_tts(
                 "/home/valentin/Desktop/MemoRoom/modules/_Liveo/TTS/Echo.wav")
             start_time = time.time()
+            
+
+# Convertir l'heure du rendez-vous en objet datetime
+        # print("Bonjour ! Nous sommes le vendredi 16 juin il est 10:00. Vous avez un rendez-vous à 10:30, soit dans 30 minutes, chez votre médecin traitant, veillez à ne pas oublier votre carte vitale. Souhaitez vous que je répète ?")
+        # print("Bonjour ! Nous sommes le", datetime.now().strftime("%A %d %B"), "il est", datetime.now().strftime("%H:%M"), ". Vous avez un rendez-vous à ",datetime.strptime(appointment['heure'], "%H:%M"), ", soit dans ",difference_temps," pour ",appointment["titre"],".")
 
         my_btn.checking_state()
         button_state = my_btn.pressed
         if button_state:
-            hub.launch_tts(
-                "/home/valentin/Desktop/MemoRoom/modules/_Liveo/TTS/Digital-bell.wav")
-            if appointment_exists:
-                pass
-            elif current_appointment:
-                pass
+            btn_was_pressed = True
+        if btn_was_pressed:
+            if not waiting_data:
+                hub.send_message_via_websocket("LED_off")
+                message = "Bonjour ! Nous sommes le " + datetime.now().strftime("%A %d %B") + " il est " + datetime.now().strftime("%H:%M") + ". Vous avez un rendez-vous à " + appointment['heure'] + ", soit dans " + str(difference_temps).split(":")[0] + " heures et " + str(difference_temps).split(":")[1] + " minutes pour " + appointment["titre"] + "."
+                web = {
+                    'titre': "remind",
+                    'data': {'titre': appointment['titre'], 'heure': appointment['heure']}
+                }
+                hub.send_web_message(web)
+                hub.speak_text(message)
+                hub.send_message_via_websocket("Whisper_reminder")
+                hub.speak_text("Souhaitez vous que je répète ?")
+            received_message = hub.get_received_message()
+            waiting_data = True
+            if received_message:
+                if received_message.startswith("PC WhisperBool#"):
+                    print("###################    Bool#   #####################")
+                    value = received_message.split("Bool#", 1)[1]
+                    intent = "bool"
+                    nlu_result = hub.run_nlu(text=value, intent=intent)
+                    if not nlu_result:
+                        hub.speak_text(
+                            "Je n'ai pas bien compris votre réponse, pouvez-vous répéter s'il vous plaît.")
+                        hub.send_message_via_websocket("Whisper_remind data_notOk")
+                        received_message = None
+                    else :
+                        print(nlu_result)
+                        if nlu_result == "negation":
+                            hub.speak_text(
+                                "Ravis d'avoir pu vous aider !")
+                            hub.send_message_via_websocket("Whisper_remind data_Ok")
+                            hub.handle_standby()
+                        elif nlu_result == "affirmation":
+                            hub.speak_text(
+                                "Autant pour moi, je vous répète")
+                            hub.send_message_via_websocket("Whisper_remind data_Ok")
+                            waiting_data=False
+                        received_message = None
             pass  # Sortir de la boucle dès qu'un rendez-vous est trouvé

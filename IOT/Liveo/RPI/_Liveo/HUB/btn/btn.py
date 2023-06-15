@@ -17,5 +17,5 @@ class Btn:
             if input_state == 0:
                 print('Button Pressed')
                 self.pressed = True
-        if time.time() - self.startedTime > 5:
+        if time.time() - self.startedTime > 1:
             self.pressed = False

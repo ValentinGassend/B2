@@ -3,6 +3,7 @@ from datetime import datetime
 class AppointmentManager:
     def __init__(self, file_path):
         self.file_path = file_path
+        self.appointment_to_remind=None
 
     def load_data(self):
         with open(self.file_path, 'r') as file:
@@ -28,11 +29,21 @@ class AppointmentManager:
                 reminder_time = datetime.strptime(appointment['rappel']['heure'], "%H:%M").time()
 
             if appointment_date == current_time.date() and appointment_time == current_time.time():
+                self.set_reminder_apointment(appointment)
                 return appointment
             elif reminder_date == current_time.date() and reminder_time == current_time.time():
+                self.set_reminder_apointment(appointment)
+
                 return appointment
 
         return None
+    def set_reminder_apointment(self, appointment):
+        print(appointment)
+        self.appointment_to_remind = appointment
+    
+    def get_reminder_apointment(self):
+        if self.appointment_to_remind:
+            return self.appointment_to_remind
 
     def get_appointment_by_id(self, appointment_id):
         appointments = self.get_all_appointments()

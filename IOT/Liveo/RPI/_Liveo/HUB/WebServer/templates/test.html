@@ -308,6 +308,7 @@
     var socket = io.connect('http://192.168.1.16:3000/');
     console.log("Consoled");
     socket.on('update', function (message) {
+      console.log(message)
       // console.log("Data received");
       var timeElement = document.getElementsByClassName('time')[0];
       var logoElement = document.getElementsByClassName('logo')[0];
@@ -327,7 +328,7 @@
         if (logoElement !== undefined)
           logoElement.style.display = 'block';
         if (dateElement !== undefined)
-          dateElement.style.display = 'block';
+          dateElement.style.display = 'none';
         if (timeElement !== undefined)
           timeElement.style.display = "none";
         if (connectStateElement !== undefined)
@@ -390,7 +391,7 @@
         // Afficher date et heure
       }
 
-      if (message["title"] === "Suppressed") {
+      if (message["titre"] === "Suppressed") {
         if (timeElement !== undefined)
           timeElement.style.display = "none";
         if (logoElement !== undefined)
@@ -508,7 +509,7 @@
         // Afficher seulement l'heure
       }
 
-      if (message["title"] === "resume") {
+      if (message["titre"] === "resume") {
         if (timeElement !== undefined)
           timeElement.style.display = "none";
         if (logoElement !== undefined)
@@ -546,7 +547,7 @@
           footerElement.style.display = "block";
       }
 
-      if (message["title"] === "remind") {
+      if (message["titre"] === "remind") {
         if (timeElement !== undefined)
           timeElement.style.display = "none";
         if (logoElement !== undefined)
@@ -576,15 +577,12 @@
 
         if (reminderInfoElement !== undefined)
           reminderInfoElement.style.display = "block";
-        if (headElement !== undefined)
-          headElement.style.display = "block";
-        if (meetingInfoDateElement !== undefined)
-          meetingInfoDateElement.style.display = "grid";
-        if (footerElement !== undefined)
-          footerElement.style.display = "block";
+          reminderInfoElement.innerText = message["data"]["titre"]+" à "+message["data"]["heure"];
+        if (timeElement !== undefined)
+          timeElement.style.display = "block";
       }
 
-      if (message["title"] === "info") {
+      if (message["titre"] === "info") {
         if (timeElement !== undefined)
           timeElement.style.display = "none";
         if (logoElement !== undefined)
