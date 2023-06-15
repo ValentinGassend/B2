@@ -6,6 +6,9 @@ from Websocket.WebsocketManager import WSServer
 from RFID.rfid import RfidTrigger
 from BLE.ble import BLE, check_BLE_is_ready
 from buttonFileCount.btn_file_count import ButtonPressCounter
+from WebServer.webserver import WebServer
+from WebServer.webclient import WebSocketClient
+import multiprocessing
 import json
 from btn.btn import Btn
 from TTS.tts import TTS
@@ -14,8 +17,15 @@ import threading
 # address = '192.168.43.242'
 address = '192.168.1.16'
 port = 8082
+webport = 3000
 server = WSServer(address, port)
+myWebServeur = WebServer(address, webport)
 
+server_process = multiprocessing.Process(target=myWebServeur.start)
+server_process.start()
+
+client = WebSocketClient(f'http://'+address+':'+str(webport)+'/')
+client.connect()
 # Configuration du gestionnaire de rendez-vous
 manager = AppointmentManager(
     '/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/appointments.json')
@@ -27,8 +37,6 @@ my_btn = Btn(button_pin)
 base_time = time.time()  # Remplacez par votre temps de base
 next_time = base_time
 # Lancement du serveur dans un thread séparé
-
-
 def run_server():
     server.start()
     try:
@@ -89,6 +97,12 @@ class HubState:
 
     def handle_self_state(self, hub):
         print("Erreur : Impossible de rester dans l'état actuel")
+    
+    def send_web_message(self, message):
+        if client.isConnected():
+            print(message)
+            # Vous pouvez placer d'autres actions ici avant d'envoyer un message
+            client.send_message(message)
 
 
 # Implémentation de l'état de veille
@@ -451,6 +465,9 @@ class Hub:
     def handle_self_state(self):
         self.state.handle_self_state(self)
 
+    def send_web_message(self, message):
+        self.state.send_web_message(message)
+
     def websocket_connexion(self):
         return self.state.websocket_connexion(self)
 
@@ -504,6 +521,7 @@ standbyInit = False
 cardReader = True
 while True:
     if isinstance(hub.get_state(), StandbyState):
+        hub.send_web_message("Default")
         rfid_trigger.read()  # This will run indefinitely
         card_state = rfid_trigger.get_state()
 
@@ -515,7 +533,6 @@ while True:
             cardReader = True
         if standbyInit:
             cardReader = False
-        print(card_state)
         my_btn.checking_state()
         button_state = my_btn.pressed
 
@@ -523,6 +540,7 @@ while True:
             hub.handle_button_trigger()
 
         if card_state and cardReader:
+            hub.send_web_message("Connecting")
             hub.handle_rfid_trigger()
 
         current_time = datetime.now()  # Obtenir le temps actuel
@@ -551,8 +569,9 @@ while True:
             fourpart = True
             # hub.launch_bluetooth()
             # btn_value = hub.communicate_with_ble()
+            
             btn_value = 0
-
+        
         if btn_value is not None and btn_value > 0:
             if not is_intro_executed:
                 hub.launch_tts(
@@ -625,6 +644,7 @@ while True:
             hub.handle_standby()
     elif isinstance(hub.get_state(), ButtonTriggerState):
         hub.speak_text("Bonjour, comment puis-je vous aider ?")
+        # hub.send_web_message({"title": "Suppressed"})
         pass
     elif isinstance(hub.get_state(), ReminderModeState):
         current_time = time.time()

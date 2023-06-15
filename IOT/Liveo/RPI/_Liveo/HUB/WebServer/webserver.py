@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template,url_for
 from flask_socketio import SocketIO, emit
 import multiprocessing
 
@@ -17,7 +17,11 @@ class WebServer:
         self.socketio.on_event('message', self.handle_message)
 
     def index(self):
-        return render_template('test.html', message=self.message_data)
+        logo_time = url_for('static', filename='images/logo_time.svg')
+        logo_date = url_for('static', filename='images/logo_date.svg')
+        liveo = url_for('static', filename='images/liveo.svg')
+        wave = url_for('static', filename='images/wave.svg')
+        return render_template('test.html', message=self.message_data, logo_time=logo_time, logo_date=logo_date, liveo=liveo, wave=wave)
 
     def handle_connect(self):
         print('Client connected')
@@ -27,9 +31,8 @@ class WebServer:
 
     def handle_message(self, message):
         self.message_data = message
-        if message == 'banane' or message == "This is my data":
-            print(message)
-            emit('update', self.message_data, broadcast=True)
+        # print(message)
+        emit('update', self.message_data, broadcast=True)
 
     def start(self):
         self.socketio.run(self.app, host=self.address, port=self.port, log_output=False)
