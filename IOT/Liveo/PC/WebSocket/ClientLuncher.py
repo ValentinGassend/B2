@@ -1,30 +1,16 @@
-from WSClient import WSClient
+import socketio
 
-# Adresse IP et port du serveur
-server_address = '192.168.1.16'
-server_port = 8765
+# Connect to the server
+sio = socketio.Client()
+sio.connect('http://192.168.1.16:3000/')
 
-# Création de l'instance du client
-client = WSClient(server_address, server_port)
+@sio.event
+def connect():
+    print('Connected to server')
+    # sio.emit('message', 'banane')  # Emit the "message" event
+    sio.emit('message', 'This is my data')  # Emit the "message" event
+    print("data_sended")
+    sio.disconnect()
 
-# Connexion au serveur WebSocket
-client.connect()
-print("Connecté au serveur WebSocket.")
 
-# Boucle principale pour traiter les messages entrants
-while True:
-    # Envoi d'un message au serveur
-    message = input("Message à envoyer au serveur : ")
-    client.send_message(message)
-
-    # Réception de la réponse du serveur
-    response = client.receive_message()
-    if not response == "LED_PONG":
-        print("Réponse du serveur :", response)
-
-    # Conditions de sortie de la boucle
-    if response == "Leave" or response is None:
-        break
-
-# Fermeture de la connexion
-client.close()
+sio.on('connect',connect())

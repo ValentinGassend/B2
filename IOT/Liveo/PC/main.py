@@ -5,11 +5,11 @@ import keyboard
 
 neverStarted = True
 # Adresse IP et port du serveur
-# server_address = '192.168.1.16'
+server_address = '192.168.1.16'
 
 
-server_address = '192.168.43.242'
-server_port = 8082
+# server_address = '192.168.43.242'
+server_port = 8081
 
 # Création de l'instance du client
 client = WSClient(server_address, server_port)
@@ -69,6 +69,19 @@ while True:
         my_assistant_bool.close()
         my_assistant_remind.close()
         my_assistant_RDV.start()
+
+    if response == "Whisper_reminder":
+        my_assistant_bool = MyAssistant(model='small', commands_callback=MyCallbackBool,
+                                        n_threads=10, input_device=0, q_threshold=6)
+        my_assistant_bool.start()
+    if response == "Whisper_remind data_OK":
+            
+            my_assistant_bool.close()
+    if response == "Whisper_remind data_notOk":
+                
+            my_assistant_bool.close()
+            my_assistant_bool.start()
+
 
     if response == "Whisper_rdv data_notOK":
         my_assistant_RDV.close()
