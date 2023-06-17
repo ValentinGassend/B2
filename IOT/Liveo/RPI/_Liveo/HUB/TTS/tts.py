@@ -1,6 +1,8 @@
 from gtts import gTTS
 from pygame import mixer
 import subprocess
+from pydub import AudioSegment
+
 
 class TTS:
     def __init__(self):
@@ -21,9 +23,14 @@ class TTS:
             pass
 
     def sound(self, file):
-        if not type(file)==type(""):
+        if not type(file) == type(""):
             file = str(file)
         subprocess.Popen("aplay '"+file+"'", shell=True)
 
     def kill(self):
         mixer.music.stop()
+
+
+# mytts = TTS()
+
+# mytts.talk("coucou les copains")

@@ -1,4 +1,4 @@
-from flask import Flask, render_template,url_for
+from flask import Flask, render_template, url_for
 from flask_socketio import SocketIO, emit
 import multiprocessing
 
@@ -12,9 +12,13 @@ class WebServer:
         self.message_data = ""
 
         self.app.route('/')(self.index)
+        self.app.route('/')(self.serve_font)
         self.socketio.on_event('connect', self.handle_connect)
         self.socketio.on_event('disconnect', self.handle_disconnect)
         self.socketio.on_event('message', self.handle_message)
+
+    def serve_font(self, filename):
+        return url_for('static', filename='images/logo_time.svg')
 
     def index(self):
         logo_time = url_for('static', filename='images/logo_time.svg')
@@ -35,8 +39,8 @@ class WebServer:
         emit('update', self.message_data, broadcast=True)
 
     def start(self):
-        self.socketio.run(self.app, host=self.address, port=self.port, log_output=False)
+        self.socketio.run(self.app, host=self.address,
+                          port=self.port, log_output=False)
 
     def send_message(self, message):
         self.socketio.emit('update', message, broadcast=True)
-
