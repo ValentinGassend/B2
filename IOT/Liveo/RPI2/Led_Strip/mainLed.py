@@ -27,14 +27,6 @@ led_state_machine = LedStateMachine(colors)
 print("static")
 
 led_state_machine.handle_command("LED_static")
-time.sleep(2)
-print("off")
-led_state_machine.handle_command("LED_off") 
-time.sleep(5)
-print("static")
-
-led_state_machine.handle_command("LED_static")
-time.sleep(2)
 # led_state_machine.handle_command("LED_static")
 # while True:
 #     led_state_machine.handle_command("LED_fade")  # Démarre le mode "fade"

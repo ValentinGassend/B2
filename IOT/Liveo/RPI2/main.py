@@ -4,8 +4,8 @@ from Led_Strip.led import LedMode
 
 # Adresse et port du serveur WebSocket
 server_address = '192.168.1.16'
+# server_address = '192.168.43.242'
 server_port = 8081
-from rpi_ws281x import Color
 # Création d'une instance du client WebSocket
 websocket_client = WSClient(server_address, server_port, "LED")
 LedManager = LedMode()
@@ -20,7 +20,7 @@ while True:
     # Réception de la réponse du serveur WebSocket
     response = websocket_client.receive_message()
     print('Mode de LED actuel :', response)
-    if not response =="LED_static_2":
+    if not response =="LED_static":
         LedManager.handle_message(response)
     else :
         LedManager.handle_message(response,2)

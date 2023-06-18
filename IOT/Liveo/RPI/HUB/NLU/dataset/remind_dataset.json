@@ -1,0 +1,470 @@
+{
+  "entities": {
+    "snips/time": {
+      "use_synonyms": true,
+      "data": [
+        {
+          "value": "0h",
+          "synonyms": [
+            "00h00",
+            "00:00",
+            "minuit",
+            "0 heure",
+            "0h heures"
+          ]
+        },
+        {
+          "value": "1h",
+          "synonyms": [
+            "01h00",
+            "01:00",
+            "1 heure",
+            "1h heures"
+          ]
+        },
+        {
+          "value": "2h",
+          "synonyms": [
+            "02h00",
+            "02:00",
+            "2 heure",
+            "2h heures"
+          ]
+        },
+        {
+          "value": "3h",
+          "synonyms": [
+            "03h00",
+            "03:00",
+            "3 heures"
+          ]
+        },
+        {
+          "value": "4h",
+          "synonyms": [
+            "04h00",
+            "04:00",
+            "4 heures"
+          ]
+        },
+        {
+          "value": "5h",
+          "synonyms": [
+            "05h00",
+            "05:00",
+            "5 heures"
+          ]
+        },
+        {
+          "value": "6h",
+          "synonyms": [
+            "06h00",
+            "06:00",
+            "matin",
+            "6 heures"
+          ]
+        },
+        {
+          "value": "7h",
+          "synonyms": [
+            "07h00",
+            "07:00",
+            "7 heures"
+          ]
+        },
+        {
+          "value": "8h",
+          "synonyms": [
+            "08h00",
+            "08:00",
+            "8 heures"
+          ]
+        },
+        {
+          "value": "9h",
+          "synonyms": [
+            "09h00",
+            "09:00",
+            "9 heures"
+          ]
+        },
+        {
+          "value": "10h",
+          "synonyms": [
+            "10h00",
+            "10:00",
+            "10 heures"
+          ]
+        },
+        {
+          "value": "11h",
+          "synonyms": [
+            "11h00",
+            "11:00",
+            "11 heures"
+          ]
+        },
+        {
+          "value": "12h",
+          "synonyms": [
+            "12h00",
+            "12:00",
+            "midi",
+            "12 heures"
+          ]
+        },
+        {
+          "value": "13h",
+          "synonyms": [
+            "13h00",
+            "13:00",
+            "13 heures"
+          ]
+        },
+        {
+          "value": "14h",
+          "synonyms": [
+            "14h00",
+            "14:00",
+            "après-midi",
+            "14 heures"
+          ]
+        },
+        {
+          "value": "15h",
+          "synonyms": [
+            "15h00",
+            "15:00",
+            "15 heures"
+          ]
+        },
+        {
+          "value": "16h",
+          "synonyms": [
+            "16h00",
+            "16:00",
+            "16 heures"
+          ]
+        },
+        {
+          "value": "17h",
+          "synonyms": [
+            "17h00",
+            "17:00",
+            "17 heures"
+          ]
+        },
+        {
+          "value": "18h",
+          "synonyms": [
+            "18h00",
+            "18:00",
+            "soir",
+            "18 heures"
+          ]
+        },
+        {
+          "value": "19h",
+          "synonyms": [
+            "19h00",
+            "19:00",
+            "19 heures"
+          ]
+        },
+        {
+          "value": "20h",
+          "synonyms": [
+            "20h00",
+            "20:00",
+            "20 heures"
+          ]
+        },
+        {
+          "value": "21h",
+          "synonyms": [
+            "21h00",
+            "21:00",
+            "21 heures"
+          ]
+        },
+        {
+          "value": "22h",
+          "synonyms": [
+            "22h00",
+            "22:00",
+            "soir",
+            "tard",
+            "22 heures"
+          ]
+        },
+        {
+          "value": "23h",
+          "synonyms": [
+            "23h00",
+            "23:00",
+            "23 heures"
+          ]
+        }
+      ]
+    }
+  },
+  "intents": {
+    "fixerRappel": {
+      "utterances": [
+        {
+          "data": [
+            {
+              "text": "Rappelle-moi de prendre rendez-vous chez le médecin"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": " à 10h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "N'oublie pas de fixer un rendez-vous professionnel"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": " à 14h30"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Programme un rappel pour mon rendez-vous chez le dentiste"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": " à 16h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Mets un rappel pour prendre rendez-vous chez le coiffeur"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": " à 11h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "Rappelle-moi de fixer un rendez-vous avec mon avocat"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": " à 9h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 14 heures"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 14 heures"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "le jour même à 18h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "le jour même à 18h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 20h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 20h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 9h30"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 9h30"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 21 heures"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 21 heures"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 0h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 0h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 1h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 1h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 2h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 2h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 3h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 3h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 4h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 4h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 5h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 5h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 6h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 6h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 7h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 7h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 8h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 8h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 22h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 22h"
+            }
+          ]
+        },
+        {
+          "data": [
+            {
+              "text": "à 23h"
+            },
+            {
+              "entity": "snips/time",
+              "slot_name": "time",
+              "text": "à 23h"
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "language": "fr"
+}

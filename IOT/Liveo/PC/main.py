@@ -5,10 +5,10 @@ import keyboard
 
 neverStarted = True
 # Adresse IP et port du serveur
-# server_address = '192.168.1.16's
+server_address = '192.168.1.16'
 
 
-server_address = '192.168.43.242'
+# server_address = '192.168.43.242'
 server_port = 8081
 
 # Création de l'instance du client
@@ -57,12 +57,12 @@ while True:
                                                 n_threads=10, input_device=0, q_threshold=6, silence_threshold=50)
 
     # Réception de la réponse du serveur
-    response = str(client.receive_message())
+    
 
-    if not previousResponse == response:
-        if not response == "LED_PONG":
-            print("Réponse du serveur : '" + response + "'")
-    previousResponse = response
+    response = str(client.receive_message())
+    if not response == "LED_PONG":
+        print("Réponse du serveur : '" + response + "'")
+    
 
     if response == "ID" and id_not_recieved:
         print("Message envoyé au serveur : '" + Id + "'")
@@ -92,9 +92,6 @@ while True:
     if response == "Whisper_remind data_OK":
         my_assistant_bool.close()
         response=None
-    if response == "Whisper_bool data_notOk":
-        my_assistant_bool.close()
-        response=None
     if response == "Whisper_bool no":
         my_assistant_bool.close()
         response=None
@@ -120,7 +117,6 @@ while True:
 
     if response == "Whisper_bool data_notOK":
         my_assistant_bool.close()
-        my_assistant_bool.start()
         response=None
     if response == "Whisper_bool start":
         my_assistant_bool.start()

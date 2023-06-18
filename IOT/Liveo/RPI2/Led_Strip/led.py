@@ -62,18 +62,13 @@ class LedMode:
             pass
         elif message == "LED_static" or message =="LED_static_2":
             # self.static_thread_stop.set()  # Définit l'Event pour arrêter le thread de "static"
-            if self.off_thread.is_alive():
-                print("Alive")
             if not self.static_thread.is_alive():
-                print("not Alive")
-                
                 self.static_thread = threading.Thread(target=self.static_loop,args=(delay,))
                 self.static_thread_stop.set()
                 self.off_thread_stop.set()
                 self.static_thread_stop.clear()
                 self.static_thread.start()
         elif message == "LED_off":
-            # self.static_thread_stop.set()
             if not self.off_thread.is_alive():
                 self.off_thread = threading.Thread(target=self.off_loop, args=(delay,))
                 self.off_thread_stop.clear()
@@ -101,11 +96,8 @@ class LedMode:
                 self.startedTime = time()
                 self.nbrColor = 0
                 self.firstTime = False
-
-            if not self.nbrColor == len(self.colors):
                 strip.setBrightness(0)
-            else:
-                self.nbrColor = 0
+
         strip.show()
         self.led_status = "Off_mode"  # Met à jour l'état des LEDs
 
@@ -123,8 +115,6 @@ class LedMode:
                     self.nbrColor = 0
                     self.firstTime = False
                 currentTime = time()
-                print(currentTime-self.startedTime>delay_ms )
-                print(currentTime-self.startedTime )
 
 
                 if not self.nbrColor == len(self.colors):
@@ -134,15 +124,13 @@ class LedMode:
                         strip.setBrightness(255)
 
                     else:
-                        self.nbrColor = self.nbrColor + 1
                         strip.setBrightness(0)
-                        # self.handle_message("LED_off")
-                        # self.led_status = "Off_mode"
                 else:
                     self.nbrColor = 0
 
-            strip.show()  # Afficher les pixels après chaque itération de la boucle j
-              # Sortir de la boucle j si le délai spécifié est atteint
+            strip.show()  
+            # Afficher les pixels après chaque itération de la boucle j
+            # Sortir de la boucle j si le délai spécifié est atteint
 
         self.led_status = "Static_mode"  # Met à jour l'état des LEDs
 

@@ -153,6 +153,10 @@ class MyAssistant:
             except KeyboardInterrupt:
                 self.close()  # Call the close method when KeyboardInterrupt is raised
 
+
+
+    def available_devices():
+        return sd.query_devices()
     def close(self):
         """
         Use this method to close the assistant.

@@ -1,0 +1,150 @@
+{
+    "entities": {
+        "type_rendez_vous": {
+            "automatically_extensible": true,
+            "data": [
+                {
+                    "value": "rendez-vous médical",
+                    "synonyms": [
+                        "consultation médicale",
+                        "visite chez le médecin",
+                        "examen médical",
+                        "suivi médical",
+                        "rendez-vous chez le docteur",
+                        "rendez-vous chez le médecin",
+                        "rendez-vous médicalisé",
+                        "rendez-vous de santé"
+                    ]
+                },
+                {
+                    "value": "rendez-vous professionnel",
+                    "synonyms": [
+                        "entretien professionnel",
+                        "rendez-vous d'affaires"
+                    ]
+                },
+                {
+                    "value": "rendez-vous personnel",
+                    "synonyms": [
+                        "rendez-vous amical",
+                        "rendez-vous privé"
+                    ]
+                }
+            ],
+            "matching_strictness": 0.6,
+            "use_synonyms": true
+        },
+        "details_rendez_vous": {
+            "automatically_extensible": true,
+            "use_synonyms": true,
+            "data": [
+                {
+                    "value": "Dr. Martin",
+                    "synonyms": [
+                        "docteur Martin",
+                        "médecin traitant"
+                    ]
+                },
+                {
+                    "value": "M. Dupont",
+                    "synonyms": [
+                        "Monsieur Dupont",
+                        "responsable des ventes"
+                    ]
+                },
+                {
+                    "value": "Mme. Lambert",
+                    "synonyms": [
+                        "Madame Lambert",
+                        "directrice des ressources humaines"
+                    ]
+                }
+            ]
+        },
+        "snips/date": {},
+        "snips/time": {}
+    },
+    "intents": {
+        "prendreRendezVousMedical": {
+            "utterances": [
+                {
+                    "data": [
+                        {
+                            "text": "Je voudrais prendre un "
+                        },
+                        {
+                            "entity": "type_rendez_vous",
+                            "slot_name": "type_rendez_vous",
+                            "text": "{type_rendez_vous}"
+                        },
+                        {
+                            "text": " avec "
+                        },
+                        {
+                            "entity": "details_rendez_vous",
+                            "slot_name": "details_rendez_vous",
+                            "text": "{details_rendez_vous}"
+                        },
+                        {
+                            "text": " le "
+                        },
+                        {
+                            "entity": "snips/date",
+                            "slot_name": "date",
+                            "text": "{date}"
+                        },
+                        {
+                            "text": " à "
+                        },
+                        {
+                            "entity": "snips/time",
+                            "slot_name": "heure",
+                            "text": "{heure}"
+                        }
+                    ]
+                }
+            ]
+        },
+        "prendreRendezVousProfessionnel": {
+            "utterances": [
+                {
+                    "data": [
+                        {
+                            "text": "Je voudrais prendre un "
+                        },
+                        {
+                            "entity": "type_rendez_vous",
+                            "slot_name": "type_rendez_vous",
+                            "text": "{type_rendez_vous}"
+                        },
+                        {
+                            "text": " avec "
+                        },
+                        {
+                            "entity": "details_rendez_vous",
+                            "slot_name": "details_rendez_vous",
+                            "text": "{details_rendez_vous}"
+                        },
+                        {
+                            "text": " le "
+                        },
+                        {
+                            "entity": "snips/date",
+                            "slot_name": "date",
+                            "text": "{date}"
+                        },
+                        {
+                            "text": " à "
+                        },
+                        {
+                            "entity": "snips/time",
+                            "slot_name": "heure",
+                            "text": "{heure}"
+                        }
+                    ]
+                }
+            ]
+        }
+    },
+    "language": "fr"
+}
