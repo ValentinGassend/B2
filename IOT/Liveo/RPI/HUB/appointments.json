@@ -294,22 +294,12 @@
     },
     {
       "id": 28,
-      "date": "2023-06-18",
-      "heure": "20:00",
+      "date": "2023-06-20",
+      "heure": "16:00",
       "titre": "rendez-vous m\u00e9dical",
       "informations_supplementaires": "",
       "rappel": {
-        "heure": "19:30"
-      }
-    },
-    {
-      "id": 29,
-      "date": "2023-06-18",
-      "heure": "18:30",
-      "titre": "rendez-vous m\u00e9dical",
-      "informations_supplementaires": "",
-      "rappel": {
-        "heure": ""
+        "heure": "15:00"
       }
     }
   ]
