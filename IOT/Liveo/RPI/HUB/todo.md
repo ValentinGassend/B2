@@ -1,9 +1,9 @@
 - Changer le logo ecran - DONE
-- faire les je n'ai pas compris - P3
-- changer les écrans au bon moment - P1
-- TTS les bonnes données - P1
+- changer les écrans au bon moment - P1 - DONE
+- TTS les bonnes données - P1 - DONE
+- faire 2 secondes "écran connecté" puis default - P1 - DONE
 - lancer tout ça au boot des RPi - P1
-- changer la typo en plus gros - P2
-- faire 2 secondes "écran connecté" puis default - P1
 - changer le TTS (speak mode) - P1
+- changer la typo en plus gros - P2
 - Améliorer le dataset pour l'odre des informations - P2
+- faire les je n'ai pas compris - P3

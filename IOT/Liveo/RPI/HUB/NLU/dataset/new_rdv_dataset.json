@@ -58,6 +58,55 @@
                         "Madame Lambert",
                         "directrice des ressources humaines"
                     ]
+                },
+                {
+                    "value": "Je ne dois pas oublier de rappeler le Dr. Martin",
+                    "synonyms": [
+                        "Je dois penser à appeler le docteur Martin",
+                        "N'oublie pas de prendre rendez-vous avec ton médecin traitant"
+                    ]
+                },
+                {
+                    "value": "Je ne dois pas oublier mon rendez-vous avec M. Dupont",
+                    "synonyms": [
+                        "Je dois penser à ma réunion avec Monsieur Dupont",
+                        "N'oublie pas ton rendez-vous avec le responsable des ventes"
+                    ]
+                },
+                {
+                    "value": "Je ne dois pas oublier ma réunion avec Mme. Lambert",
+                    "synonyms": [
+                        "Je dois penser à voir Madame Lambert",
+                        "N'oublie pas ton rendez-vous avec la directrice des ressources humaines"
+                    ]
+                },
+                {
+                    "value": "Je ne dois pas oublier ma carte vitale",
+                    "synonyms": [
+                        "N'oublie pas d'apporter ta carte vitale",
+                        "Pense à prendre ta carte vitale"
+                    ]
+                },
+                {
+                    "value": "Je ne dois pas oublier ma carte bleue",
+                    "synonyms": [
+                        "N'oublie pas d'apporter ta carte bleue",
+                        "Pense à prendre ta carte bancaire"
+                    ]
+                },
+                {
+                    "value": "Je ne dois pas oublier ma baguette de pain",
+                    "synonyms": [
+                        "N'oublie pas d'acheter une baguette de pain",
+                        "Pense à ramener une baguette de pain"
+                    ]
+                },
+                {
+                    "value": "Je ne dois pas oublier mes médicaments",
+                    "synonyms": [
+                        "N'oublie pas de prendre tes médicaments",
+                        "Pense à emporter tes médicaments"
+                    ]
                 }
             ]
         },

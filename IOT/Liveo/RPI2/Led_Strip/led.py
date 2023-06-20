@@ -75,6 +75,13 @@ class LedMode:
                 self.static_thread_stop.set()
                 self.fade_thread_stop.set()
                 self.off_thread.start()
+        else :
+            if not self.off_thread.is_alive():
+                self.off_thread = threading.Thread(target=self.off_loop, args=(delay,))
+                self.off_thread_stop.clear()
+                self.static_thread_stop.set()
+                self.fade_thread_stop.set()
+                self.off_thread.start()
         # else:
         #     if not self.off_thread.is_alive():
         #         self.off_thread = threading.Thread(target=self.off_loop(delay))

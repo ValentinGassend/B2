@@ -2,132 +2,132 @@
 <html>
 
 <head>
-  <title>Liveo Dashboard</title>
+  <title>Liveo</title>
   <style>
     @font-face {
       font-family: 'Helvetica Neue';
       src: url("{{ url_for('static', filename='fonts/HelveticaNeue-Bold.woff2') }}") format('woff2'),
-          url("{{ url_for('static', filename='fonts/HelveticaNeue-Bold.woff') }}") format('woff'),
-          url("{{ url_for('static', filename='fonts/HelveticaNeue-Bold.ttf') }}") format('truetype');
+      url("{{ url_for('static', filename='fonts/HelveticaNeue-Bold.woff') }}") format('woff'),
+      url("{{ url_for('static', filename='fonts/HelveticaNeue-Bold.ttf') }}") format('truetype');
       font-weight: bold;
       font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-BoldItalic.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-BoldItalic.woff') format('woff'),
-            url('fonts/HelveticaNeue-BoldItalic.ttf') format('truetype');
-        font-weight: bold;
-        font-style: italic;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-BoldItalic.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-BoldItalic.woff') format('woff'),
+        url('fonts/HelveticaNeue-BoldItalic.ttf') format('truetype');
+      font-weight: bold;
+      font-style: italic;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue.woff2') format('woff2'),
-            url('fonts/HelveticaNeue.woff') format('woff'),
-            url('fonts/HelveticaNeue.ttf') format('truetype');
-        font-weight: normal;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue.woff2') format('woff2'),
+        url('fonts/HelveticaNeue.woff') format('woff'),
+        url('fonts/HelveticaNeue.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-CondensedBlack.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-CondensedBlack.woff') format('woff'),
-            url('fonts/HelveticaNeue-CondensedBlack.ttf') format('truetype');
-        font-weight: 900;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-CondensedBlack.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-CondensedBlack.woff') format('woff'),
+        url('fonts/HelveticaNeue-CondensedBlack.ttf') format('truetype');
+      font-weight: 900;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url("{{ url_for('static', filename='fonts/HelveticaNeue-CondensedBold.woff2') }}") format('woff2'),
-            url("{{ url_for('static', filename='fonts/HelveticaNeue-CondensedBold.woff') }}") format('woff'),
-            url("{{ url_for('static', filename='fonts/HelveticaNeue-CondensedBold.ttf') }}") format('truetype');
-        font-weight: bold;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url("{{ url_for('static', filename='fonts/HelveticaNeue-CondensedBold.woff2') }}") format('woff2'),
+      url("{{ url_for('static', filename='fonts/HelveticaNeue-CondensedBold.woff') }}") format('woff'),
+      url("{{ url_for('static', filename='fonts/HelveticaNeue-CondensedBold.ttf') }}") format('truetype');
+      font-weight: bold;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-Light.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-Light.woff') format('woff'),
-            url('fonts/HelveticaNeue-Light.ttf') format('truetype');
-        font-weight: 300;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-Light.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-Light.woff') format('woff'),
+        url('fonts/HelveticaNeue-Light.ttf') format('truetype');
+      font-weight: 300;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-LightItalic.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-LightItalic.woff') format('woff'),
-            url('fonts/HelveticaNeue-LightItalic.ttf') format('truetype');
-        font-weight: 300;
-        font-style: italic;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-LightItalic.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-LightItalic.woff') format('woff'),
+        url('fonts/HelveticaNeue-LightItalic.ttf') format('truetype');
+      font-weight: 300;
+      font-style: italic;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-Italic.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-Italic.woff') format('woff'),
-            url('fonts/HelveticaNeue-Italic.ttf') format('truetype');
-        font-weight: normal;
-        font-style: italic;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-Italic.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-Italic.woff') format('woff'),
+        url('fonts/HelveticaNeue-Italic.ttf') format('truetype');
+      font-weight: normal;
+      font-style: italic;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';        
-        src: url("{{ url_for('static', filename='fonts/HelveticaNeue-Medium.woff2') }}") format('woff2'),
-            url("{{ url_for('static', filename='fonts/HelveticaNeue-Medium.woff') }}") format('woff'),
-            url("{{ url_for('static', filename='fonts/HelveticaNeue-Medium.ttf') }}") format('truetype');
-        font-weight: 500;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url("{{ url_for('static', filename='fonts/HelveticaNeue-Medium.woff2') }}") format('woff2'),
+      url("{{ url_for('static', filename='fonts/HelveticaNeue-Medium.woff') }}") format('woff'),
+      url("{{ url_for('static', filename='fonts/HelveticaNeue-Medium.ttf') }}") format('truetype');
+      font-weight: 500;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-MediumItalic.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-MediumItalic.woff') format('woff'),
-            url('fonts/HelveticaNeue-MediumItalic.ttf') format('truetype');
-        font-weight: 500;
-        font-style: italic;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-MediumItalic.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-MediumItalic.woff') format('woff'),
+        url('fonts/HelveticaNeue-MediumItalic.ttf') format('truetype');
+      font-weight: 500;
+      font-style: italic;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-Thin.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-Thin.woff') format('woff'),
-            url('fonts/HelveticaNeue-Thin.ttf') format('truetype');
-        font-weight: 100;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-Thin.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-Thin.woff') format('woff'),
+        url('fonts/HelveticaNeue-Thin.ttf') format('truetype');
+      font-weight: 100;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-ThinItalic.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-ThinItalic.woff') format('woff'),
-            url('fonts/HelveticaNeue-ThinItalic.ttf') format('truetype');
-        font-weight: 100;
-        font-style: italic;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-ThinItalic.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-ThinItalic.woff') format('woff'),
+        url('fonts/HelveticaNeue-ThinItalic.ttf') format('truetype');
+      font-weight: 100;
+      font-style: italic;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-UltraLight.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-UltraLight.woff') format('woff'),
-            url('fonts/HelveticaNeue-UltraLight.ttf') format('truetype');
-        font-weight: 100;
-        font-style: normal;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-UltraLight.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-UltraLight.woff') format('woff'),
+        url('fonts/HelveticaNeue-UltraLight.ttf') format('truetype');
+      font-weight: 100;
+      font-style: normal;
     }
 
     @font-face {
-        font-family: 'Helvetica Neue';
-        src: url('fonts/HelveticaNeue-UltraLightItalic.woff2') format('woff2'),
-            url('fonts/HelveticaNeue-UltraLightItalic.woff') format('woff'),
-            url('fonts/HelveticaNeue-UltraLightItalic.ttf') format('truetype');
-        font-weight: 100;
-        font-style: italic;
+      font-family: 'Helvetica Neue';
+      src: url('fonts/HelveticaNeue-UltraLightItalic.woff2') format('woff2'),
+        url('fonts/HelveticaNeue-UltraLightItalic.woff') format('woff'),
+        url('fonts/HelveticaNeue-UltraLightItalic.ttf') format('truetype');
+      font-weight: 100;
+      font-style: italic;
     }
 
 
@@ -147,16 +147,16 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 40px;
-      line-height: 49px;
+      font-size: 50px;
+      line-height: 70px;
       color: #101328;
-      display:none;
+      display: none;
     }
 
     .meetingInfo {
       display: flex;
       justify-content: space-between;
-      display:none;
+      display: none;
     }
 
     .meetingTitle {
@@ -164,10 +164,10 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 48px;
-      line-height: 59px;
+      font-size: 60px;
+      line-height: 70px;
       color: #101328;
-      display:none;
+      display: none;
     }
 
     .sub {
@@ -179,11 +179,11 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 100px;
-      line-height: 100px;
+      font-size: 125px;
+      line-height: 125px;
       height: fit-content;
       color: #101328;
-      display:none;
+      display: none;
     }
 
     .connectState {
@@ -191,21 +191,21 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 32px;
-      line-height: 39px;
+      font-size: 40px;
+      line-height: 49px;
 
       color: #54BE92;
-      display:none;
+      display: none;
     }
 
     .resumeInfo {
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 48px;
-      line-height: 59px;
+      font-size: 60px;
+      line-height: 70px;
       color: #101328;
-      display:none;
+      display: none;
     }
 
     .reminderInfo {
@@ -213,15 +213,15 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 32px;
-      line-height: 39px;
+      font-size: 40px;
+      line-height: 49px;
       color: #54BE92;
 
       display: grid;
       justify-content: space-between;
       grid-auto-flow: column;
       column-gap: min(20px);
-      display:none;
+      display: none;
     }
 
     .meetingInfo-date {
@@ -229,14 +229,14 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 500;
-      font-size: 24px;
-      line-height: 29px;
+      font-size: 30px;
+      line-height: 35px;
       color: #101328;
       display: grid;
       grid-auto-flow: column;
       align-items: center;
       column-gap: 14px;
-      display:none;
+      display: none;
     }
 
     .meetingInfo-time {
@@ -244,13 +244,13 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 500;
-      font-size: 24px;
-      line-height: 29px;
+      font-size: 30px;
+      line-height: 35px;
       color: #101328;
       grid-auto-flow: column;
       align-items: center;
       column-gap: 14px;
-      display:none;
+      display: none;
     }
 
     .meetingInfo-more {
@@ -258,11 +258,11 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 400;
-      font-size: 16px;
-      line-height: 19px;
+      font-size: 20px;
+      line-height: 24px;
       color: #101328;
       max-width: 100%;
-      display:none;
+      display: none;
     }
 
     .head {
@@ -270,12 +270,13 @@
       font-family: 'Helvetica Neue';
       font-style: normal;
       font-weight: 700;
-      font-size: 24px;
-      line-height: 29px;
+      font-size: 30px;
+      line-height: 35px;
       text-align: center;
       text-transform: lowercase;
       color: #333896;
     }
+
     .wave {
       position: absolute;
       left: 0;
@@ -349,11 +350,11 @@
     //     cancelFullScreen.call(doc);
     //   }
     // }
-    // var socket = io.connect('http://192.168.43.242:3000/');
-    var socket = io.connect('http://192.168.1.16:3000/');
+    var socket = io.connect('http://192.168.43.242:3000/');
+    // var socket = io.connect('http://192.168.1.16:3000/');
     console.log("Consoled");
     socket.on('update', function (message) {
-      console.log(message)
+      console.log(message);
       // console.log("Data received");
       var timeElement = document.getElementsByClassName('time')[0];
       var logoElement = document.getElementsByClassName('logo')[0];
@@ -363,10 +364,12 @@
       var meetingTitleElement = document.getElementsByClassName('meetingTitle')[0];
       var resumeInfoElement = document.getElementsByClassName('resumeInfo')[0];
       var reminderInfoElement = document.getElementsByClassName('reminderInfo')[0];
+      var meetingInfoElement = document.getElementsByClassName('meetingInfo')[0];
       var meetingInfoDateElement = document.getElementsByClassName('meetingInfo-date')[0];
       var meetingInfoImgDateElement = document.getElementsByClassName('meetingInfo-date-img')[0];
       var meetingInfoTimeElement = document.getElementsByClassName('meetingInfo-time')[0];
       var meetingInfoImgTimeElement = document.getElementsByClassName('meetingInfo-time-img')[0];
+      var meetingInfoTextTimeElement = document.getElementsByClassName('meetingInfo-time-text')[0];
       var meetingInfoMoreElement = document.getElementsByClassName('meetingInfo-more')[0];
       var headElement = document.getElementsByClassName('head')[0];
       var footerElement = document.getElementsByClassName('footer')[0];
@@ -390,7 +393,7 @@
           reminderInfoElement.style.display = "none";
         if (meetingInfoDateElement !== undefined)
           meetingInfoDateElement.style.display = "none";
-          meetingInfoImgDateElement.style.display = "none";
+        meetingInfoImgDateElement.style.display = "none";
         if (meetingInfoTimeElement !== undefined)
           meetingInfoTimeElement.style.display = "none";
         if (meetingInfoMoreElement !== undefined)
@@ -422,7 +425,7 @@
           reminderInfoElement.style.display = "none";
         if (meetingInfoDateElement !== undefined)
           meetingInfoDateElement.style.display = "none";
-          meetingInfoImgDateElement.style.display = "none";
+        meetingInfoImgDateElement.style.display = "none";
         if (meetingInfoTimeElement !== undefined)
           meetingInfoTimeElement.style.display = "none";
         if (meetingInfoMoreElement !== undefined)
@@ -459,7 +462,7 @@
           reminderInfoElement.style.display = "none";
         if (meetingInfoDateElement !== undefined)
           meetingInfoDateElement.style.display = "none";
-          meetingInfoImgDateElement.style.display = "none";
+        meetingInfoImgDateElement.style.display = "none";
         if (meetingInfoTimeElement !== undefined)
           meetingInfoTimeElement.style.display = "none";
         if (meetingInfoMoreElement !== undefined)
@@ -471,7 +474,7 @@
 
         if (meetingInfoDateElement !== undefined)
           meetingInfoDateElement.style.display = 'grid';
-          meetingInfoImgDateElement.style.display = 'grid';
+        meetingInfoImgDateElement.style.display = 'grid';
         if (meetingInfoTimeElement !== undefined)
           meetingInfoTimeElement.style.display = 'grid';
         if (footerElement !== undefined)
@@ -561,6 +564,7 @@
       }
 
       else if (message["titre"] === "resume") {
+        console.log(message)
         if (timeElement !== undefined)
           timeElement.style.display = "none";
         if (logoElement !== undefined)
@@ -588,16 +592,36 @@
         if (footerElement !== undefined)
           footerElement.style.display = "none";
 
-        if (resumeInfoElement !== undefined)
+        if (resumeInfoElement !== undefined) {
           resumeInfoElement.style.display = "block";
-        if (headElement !== undefined)
-          headElement.style.display = "block";
-        if (meetingInfoTimeElement !== undefined)
-          meetingInfoTimeElement.style.display = "grid";
-        if (footerElement !== undefined)
-          footerElement.style.display = "block";
-      }
+          resumeInfoElement.innerText = message.data[0].titre;
+        }
 
+        if (headElement !== undefined) {
+          headElement.style.display = "block";
+          headElement.innerText = "1/" + str(message.data.length);
+        }
+
+        if (meetingInfoTimeElement !== undefined) {
+          meetingInfoTimeElement.style.display = "grid";
+        }
+
+        if (meetingInfoTextTimeElement !== undefined) {
+          meetingInfoTextTimeElement.style.display = "block";
+          meetingInfoTextTimeElement.innerText = message["data"][0]["heure"];
+        }
+        if (meetingInfoElement !== undefined) {
+          meetingInfoElement.style.display = "flex";
+          meetingInfoElement.style.justifyContent = "center";
+
+        }
+
+        if (footerElement !== undefined) {
+          footerElement.style.display = "block";
+          footerElement.innerText = message.data[0].informations_supplementaires;
+        }
+
+      }
       else if (message["titre"] === "remind") {
         if (timeElement !== undefined)
           timeElement.style.display = "none";
@@ -628,7 +652,7 @@
 
         if (reminderInfoElement !== undefined)
           reminderInfoElement.style.display = "block";
-          reminderInfoElement.innerText = message["data"]["titre"]+" à "+message["data"]["heure"];
+        reminderInfoElement.innerText = message["data"]["titre"] + " à " + message["data"]["heure"];
         if (timeElement !== undefined)
           timeElement.style.display = "block";
 
@@ -671,9 +695,9 @@
         if (footerElement !== undefined)
           footerElement.style.display = "block";
       }
-      
+
     });
-    
+
     setInterval(getCurrentDateTime, 1000);
   // Appeler la fonction toggleFullScreen lorsque vous voulez activer le mode plein écran
   // toggleFullScreen();
@@ -714,7 +738,7 @@
     <!-- additionnal info -->
     <p class="meetingInfo-more"></p>
   </div>
-  
+
   <img class="wave" src="{{ wave }}" alt="">
 </body>
 

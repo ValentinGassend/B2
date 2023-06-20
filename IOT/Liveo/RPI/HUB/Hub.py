@@ -16,8 +16,8 @@ from TTS.tts import TTS
 from NLU.nlu import Nlu
 import threading
 import locale
-# address = '192.168.43.242'
-address = '192.168.1.16'
+address = '192.168.43.242'
+# address = '192.168.1.16'
 port = 8081
 webport = 3000
 server = WSServer(address, port)
@@ -599,6 +599,7 @@ while True:
 
         if card_state and cardReader:
             hub.send_web_message("Connecting")
+            time.sleep(15/10)
             hub.handle_rfid_trigger()
 
         current_time = datetime.now()  # Obtenir le temps actuel
@@ -631,7 +632,10 @@ while True:
             fourpart = True
             # hub.launch_bluetooth()
             # btn_value = hub.communicate_with_ble()
+
+            hub.send_web_message("Connected")
             web_start_time = time.time()
+            hub.send_message_via_websocket("LED_static")
             stepZero = True
             stepOne = False
             stepTwo = False
@@ -640,16 +644,17 @@ while True:
             btn_value = 1 - counter
             counter = counter + 1
             web_connected = False
+            if time.time() - web_start_time > 2:
+                hub.send_message_via_websocket("LED_off")
+        print(time.time() - web_start_time)
         if time.time() - web_start_time > 2:
             web_connected = True
-            hub.send_web_message("Connected")
+            hub.send_web_message("Default")
         if btn_value is not None and btn_value > 0:
             if not is_intro_executed:
 
-                hub.send_message_via_websocket("LED_static")
                 hub.launch_tts(
                     "/home/valentin/Desktop/MemoRoom/modules/_Liveo/HUB/TTS/Digital-bell.wav")
-                hub.send_web_message("Default")
                 hub.speak_text("Bonjour ! Il semblerait que vous ayez pris " +
                                str(counter) + " rendez-vous aujourd’hui. Est-ce qu’on peut commencer ?")
                 hub.send_message_via_websocket("Whisper_binary")
@@ -663,6 +668,7 @@ while True:
                 print("step zero", stepZero)
                 print("condition ", received_message.startswith("PC WhisperBool#"))
                 if received_message.startswith("PC WhisperBool#") and stepZero:
+
                     print("###################    Bool#   #####################")
                     value = received_message.split("Bool#", 1)[1]
                     intent = "bool"
@@ -896,6 +902,13 @@ while True:
                     nlu_result = None
                 if nlu_result == "summaryOfDay":
                     appointments = manager.get_daily_appointments()
+                    print(appointments)
+
+                    web = {
+                        'titre': "resume",
+                        'data': [{'titre': appointment['titre'], 'heure': appointment['heure'], 'informations_supplementaires': appointment['informations_supplementaires']} for appointment in appointments]
+                    }
+                    hub.send_web_message(web)
                     resume_message = manager.transform_data_to_message(
                         appointments)
                     hub.speak_text(resume_message)
@@ -981,7 +994,6 @@ while True:
         pass
     elif isinstance(hub.get_state(), ReminderModeState):
         appointment = manager.get_reminder_apointment()
-        # hub.send_web_message()
         current_time = time.time()
         if not is_intro_executed:
             btn_was_pressed = False
