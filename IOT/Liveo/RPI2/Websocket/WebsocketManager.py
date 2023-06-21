@@ -128,7 +128,6 @@ class WSClient:
     def connect(self):
         self.client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client_socket.connect((self.server_address, self.server_port))
-
     def send_message(self, message):
         if self.client_socket:
             self.client_socket.sendall(message.encode("utf-8"))

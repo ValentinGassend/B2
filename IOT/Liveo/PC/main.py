@@ -8,7 +8,7 @@ neverStarted = True
 # Adresse IP et port du serveur
 # server_address = '192.168.1.16'
 server_address = '192.168.43.242'
-server_port = 8081
+server_port = 8082
 
 # Création de l'instance du client
 client = WSClient(server_address, server_port)

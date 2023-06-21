@@ -18,8 +18,8 @@ import threading
 import locale
 address = '192.168.43.242'
 # address = '192.168.1.16'
-port = 8081
-webport = 3000
+port = 8082
+webport = 3002
 server = WSServer(address, port)
 myWebServeur = WebServer(address, webport)
 
@@ -718,17 +718,28 @@ while True:
 
                     else:
                         appointment = hub.add_appointment(nlu_result, intent)
-                        formatted_date = datetime.strptime(
-                            appointment['date'], "%Y-%m-%d").strftime("%A %d %B")
                         if not appointment['informations_supplementaires'] == "":
                             details = ". Les informations complémentaire sont " + \
                                 appointment['informations_supplementaires']
                         else:
                             details = '.'
-                        if appointment['titre'] == '':
-                            appointment['titre'] = appointment['lieu']
-                        hub.speak_text("Entendu. Je récapitule ! Vous avez " + appointment['titre'] + " le " + formatted_date +
-                                       " à " + appointment['heure'] + details + ". Est-ce correct ?")
+                        if not appointment['titre'] == "":
+                            titre = appointment['titre']
+                        else:
+                            titre = 'rendez-vous m\u00e9dical'
+                        if not appointment['date'] == "":
+                            date = appointment['date']
+                        else:
+                            date = '2023-06-30'
+                        if not appointment['heure'] == "":
+                            heure = appointment['heure']
+                        else:
+                            heure = '14:30'
+
+                        formatted_date = datetime.strptime(
+                            date, "%Y-%m-%d").strftime("%A %d %B")
+                        hub.speak_text("Entendu. Je récapitule ! Vous avez " + titre + " le " + formatted_date +
+                                       " à " + heure + details + ". Est-ce correct ?")
                         hub.send_message_via_websocket("Whisper_rdv data_OK")
                         stepOne = False
                         stepTwo = True

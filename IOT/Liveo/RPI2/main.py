@@ -5,7 +5,7 @@ from Led_Strip.led import LedMode
 # Adresse et port du serveur WebSocket
 # server_address = '192.168.1.16'
 server_address = '192.168.43.242'
-server_port = 8081
+server_port = 8082
 
 # Création d'une instance du client WebSocket
 websocket_client = WSClient(server_address, server_port, "LED")
@@ -49,7 +49,7 @@ while True:
             else:
                 LedManager.handle_message(response, 2)
 
-    except ConnectionRefusedError:
+    except ConnectionRefusedError or OSError:
         print('La connexion au serveur WebSocket a été perdue. Tentative de reconnexion...')
         time.sleep(5)  # Attendre 5 secondes avant de réessayer
         connect_to_server()

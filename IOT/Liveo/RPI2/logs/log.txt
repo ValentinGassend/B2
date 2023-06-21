@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/mathieu/Documents/main.py", line 34, in <module>
+    connect_to_server()
+  File "/home/mathieu/Documents/main.py", line 26, in connect_to_server
+    websocket_client.connect()
+  File "/home/mathieu/Documents/Websocket/WebsocketManager.py", line 130, in connect
+    self.client_socket.connect((self.server_address, self.server_port))
+OSError: [Errno 101] Network is unreachable
