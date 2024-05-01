@@ -1,0 +1,232 @@
+.cursor {
+  cursor: none;
+  z-index: 1000;
+  width: 51px;
+  height: 48px;
+  display: flex;
+  transition: all 100ms ease-out;
+  position: fixed;
+  pointer-events: none;
+  left: 0;
+  top: 0;
+  background-image: url("/static/image/cursor.svg");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  transform: translate(calc(-50% + 15px), -50%);
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 120%;
+  color: $color_secondary;
+    cursor: none !important;
+
+  &-scroll,&-zoom,&-affiche {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: all 100ms ease-out;
+
+  }
+  &.zoom {
+    color: $color_white;
+    .cursor-zoom {
+        cursor: none !important;
+
+      opacity: 1;
+    }
+  }
+  &.scroll {
+    .cursor-scroll {
+        cursor: none !important;
+
+      opacity: 1;
+    }
+
+  }
+  &.interogation {
+    .cursor-affiche {
+        cursor: none !important;
+
+      color: $color_white;
+      font-size: 5rem;
+      opacity: 1;
+    }
+  }
+  &.hover {
+    width: 75px;
+    height: 72px;
+  }
+}
+
+.info-name--sub {
+  &.underline {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(0.8rem);
+    align-items: flex-end;
+
+    &:after {
+      display: block;
+      content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIyIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTIyIDEzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KPHBhdGggZD0iTTEyMSAxSDFMOTUuNDY4MSAxMUwxMjEgMVoiIHN0cm9rZT0iI0M1MkQ0OCIgc3Ryb2tlLXdpZHRoPSIyIi8+DQo8L3N2Zz4NCg==");
+
+      width: unset;
+      max-width: 100%;
+      margin-left: auto;
+    }
+  }
+}
+.underline {
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(0.8rem);
+    align-items: flex-end;
+    &:after {
+      display: block;
+      content: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIyIiBoZWlnaHQ9IjEzIiB2aWV3Qm94PSIwIDAgMTIyIDEzIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KPHBhdGggZD0iTTEyMSAxSDFMOTUuNDY4MSAxMUwxMjEgMVoiIHN0cm9rZT0iI0M1MkQ0OCIgc3Ryb2tlLXdpZHRoPSIyIi8+DQo8L3N2Zz4NCg==");
+
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+    }
+}
+red {
+  color: $color-secondary;
+}
+  b {
+    font-weight: 700;
+  }
+html {
+  font-size: calc(1em * 0.625);
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  pointer-events: all;
+  cursor: none !important;
+
+  //overflow: hidden;
+}
+
+body {
+  position: relative;
+  box-sizing: border-box;
+  margin: 0;
+  color: $color_font;
+  font-family: $ff_1;
+  font-size: 1.4rem;
+  background-color: $color_primary;
+  --x: 0;
+  --y: 0;
+  cursor: none !important;
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  a {
+    cursor: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  & {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+}
+.container {
+  margin: 0 auto;
+  padding: 0 24rem;
+  max-width: 100%;
+
+  @include media(">small") {
+    width: 770px;
+  }
+
+  @include media(">medium") {
+    width: 990px;
+  }
+
+  @include media(">large") {
+    width: 1160px;
+  }
+}.container-small {
+  margin: 0 auto;
+  padding: 0 32rem;
+  max-width: 100%;
+
+  @include media(">small") {
+    width: 770px;
+  }
+
+  @include media(">medium") {
+    width: 990px;
+  }
+
+  @include media(">large") {
+    width: 1160px;
+  }
+}
+.view {
+  height: 100vh;
+  &.view-s2 {
+    height: 200vh;
+  }
+}
+.overlay {
+position: fixed;
+  .logo {
+    position: fixed;
+    left: 4.5rem;
+    top: 3.2rem;
+    &-title {
+      position: fixed;
+      top: 5.5rem;
+      left: 12rem;
+      font-weight: 600;
+      font-size: 2.4rem;
+      line-height: 120%;
+    }
+  }
+  .info {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    right: 4rem;
+    top: 3.2rem;
+    &-name {
+      text-transform: uppercase;
+      font-size: 3.2rem;
+      font-weight: 700;
+      &--sub {
+        text-transform: lowercase;
+        font-size: 2.4rem;
+        font-weight:600;
+      }
+    }
+    &-localisation {
+      font-style: italic;
+      font-size: 2.4rem;
+      font-weight: 500;
+    }
+  }
+  .soundToogle {
+    position: fixed;
+    right: 4rem;
+    bottom: 3.2rem;
+  }
+  .brainMap {
+    position: fixed;
+    left: 4rem;
+    bottom: 3.2rem;
+  }
+}
+input[type="range" i] {
+  cursor: none;
+}
+input {
+  cursor: none;
+  writing-mode: unset;
+  outline: none;
+}

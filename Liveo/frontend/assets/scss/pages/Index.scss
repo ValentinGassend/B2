@@ -1,0 +1,78 @@
+.overlay {
+    z-index: 900;
+    .soundToogle {
+        display: flex;
+        border: 0.2rem solid $color_white;
+        gap: 0.3rem;
+        padding: 0.8rem 1.6rem;
+        width: 8.4rem;
+        height: 5.5rem;
+        align-items: center;
+        justify-content: center;
+        .line {
+
+            &-first {
+                min-width: 0.8rem;
+                animation: music 2.5s infinite alternate linear .5s;
+
+            }
+
+            &-second {
+                min-width: 0.8rem;
+                animation: music 2.5s infinite alternate linear 1s;
+
+            }
+
+            &-third {
+                min-width: 0.8rem;
+                animation: music 2.5s infinite alternate linear 1.5s;
+
+            }
+
+            &-four {
+                min-width: 0.8rem;
+                animation: music 2.5s infinite alternate linear 2s;
+
+            }
+
+            &-five {
+                min-width: 0.8rem;
+                animation: music 2.5s infinite alternate linear 2.5s;
+
+            }
+        }
+    }
+    .progressBar {
+        left: 4rem;
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%) scaleY(-1);
+
+        &-bg {
+            position: absolute;
+            top: 2px;
+            clip-path: url(#shape);
+            left: 0;
+            width: 100%;
+            background-color: #C52D48;
+        }
+    }
+    .info {
+        &-name {
+
+        }
+        &-localisation {
+            text-align: end;
+        }
+    }
+}
+
+@keyframes music {
+
+    from {
+        height: 2rem;
+    }
+    to {
+        height: 4rem;
+    }
+}

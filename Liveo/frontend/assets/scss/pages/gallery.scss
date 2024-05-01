@@ -1,0 +1,131 @@
+.gallery {
+    .steak {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        &-text {
+            text-decoration: none;
+            text-align: center;
+            z-index: 1;
+            max-width: 25rem;
+            font-weight: 700;
+            font-size: 4rem;
+            scale: 0.9;
+            line-height: 100%;
+            position: absolute;
+            right: calc(19% + (17.3% / 3.5));
+            top: calc(33.75% + (10.66% / 10));
+            text-transform: uppercase;
+            color: white;
+            opacity: 0.5;
+            transition: all 0.3s ease-in-out;
+            background-image: url("/static/image/dot.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+
+            &:hover {
+                font-size: 4.8rem;
+                opacity: 1;
+                scale: 1;
+            }
+        }
+        &-links {
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            transition: all 0.3s ease-in-out;
+        line {
+            stroke: $color_secondary;
+            stroke-opacity: 1;
+            transition: all 0.3s ease-in-out;
+
+        }
+        }
+    }
+    .illustration {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        &-links {
+            width: 100%;
+            height: 100%;
+            opacity: 0.5;
+            transition: all 0.3s ease-in-out;
+            g{
+                clip-path: none;
+            }
+            line {
+                opacity: 1;
+                stroke: $color_secondary;
+                stroke-opacity: 1;
+                transition: all 0.3s ease-in-out;
+
+            }
+        }
+    }
+    .gum, .car, .bath {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        &-text {
+            text-align: center;
+            z-index: 1;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 100%;
+            position: absolute;
+            text-transform: uppercase;
+            color: white;
+            opacity: 0.5;
+            scale: 0.9;
+            transition: all 0.3s ease-in-out;
+            background-image: url("/static/image/dot.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            transform: translate(-50%);
+            &:hover {
+                cursor: not-allowed;
+                font-size: 4.8rem;
+                scale: 1;
+                opacity: 1;
+            }
+        }
+    }
+    .gum {
+
+
+        &-text {
+            max-width: 40rem;
+            left: calc(21.1% + (22% / 2));
+            top: calc(16% + (10.66% / 5));
+            &:hover {
+                left: calc(21.1% + (24% / 2));
+                max-width: 40rem;
+            }
+        }
+    }
+    .car {
+        &-text {
+            max-width: 25rem;
+            left: calc(10.57% + (22% / 2));
+            bottom: calc(27.44% + (10.66% / 3));
+            &:hover {
+                left: calc(10.27% + (24% / 2));
+
+                max-width: 30rem;
+            }
+        }
+    }
+    .bath {
+        &-text {
+            max-width: 20rem;
+
+            right: calc(10.34%);
+            bottom: calc(15.2% + (10.66% / 10));
+            &:hover {
+                right: calc(10.34% / 2);
+                max-width: 30rem;
+            }
+        }
+    }
+}

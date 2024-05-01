@@ -1,0 +1,99 @@
+//Breakpoints
+$breakpoints: ('extra-small': 480px, 'small': 768px, 'medium': 992px, 'large': 1200px, 'extra-large': 1440px, '4k': 1920px);
+
+// Mixins
+@mixin media( $res ) {
+
+  @if mobile-only == $res {
+    @media only screen and (max-width: #{$breakpoint_sm - 1}) {
+      @content;
+    }
+  }
+
+  @if mobile == $res {
+    @media only screen and (min-width: #{$breakpoint_sm}) {
+      @content;
+    }
+  }
+
+  @if tablet-only == $res {
+    @media only screen and (max-width: #{$breakpoint_md - 1}) {
+      @content;
+    }
+  }
+
+  @if tablet == $res {
+    @media only screen and (min-width: #{$breakpoint_md}) {
+      @content;
+    }
+  }
+
+  @if laptop-only == $res {
+    @media only screen and (max-width: #{$breakpoint_lg - 1}) {
+      @content;
+    }
+  }
+
+  @if laptop == $res {
+    @media only screen and (min-width: #{$breakpoint_lg}) {
+      @content;
+    }
+  }
+
+  @if desktop-only == $res {
+    @media only screen and (max-width: #{$breakpoint_xl - 1}) {
+      @content;
+    }
+  }
+
+  @if desktop == $res {
+    @media only screen and (min-width: #{$breakpoint_xl}) {
+      @content;
+    }
+  }
+
+  @if wide-only == $res {
+    @media only screen and (max-width: #{$breakpoint_xxl - 1}) {
+      @content;
+    }
+  }
+
+  @if wide == $res {
+    @media only screen and (min-width: #{$breakpoint_xxl}) {
+      @content;
+    }
+  }
+}
+
+//Couleurs
+$color_primary:#20105C;
+$color_secondary:#C52D48;
+$color_tertiary: #FFFFFF;
+$color_mixWB: #4D407D;
+$color_mixRB: #621C54;
+//$color_quaternary: #FFEE1F;
+//$color_quinary: #691CF9;
+//$color_senary: #F9F7F5;
+//$color_septenary: #212121;
+
+//$color_primary_variation: #0060F9;
+//$color_secondary_variation: #D5419B;
+//$color_secondary_ter: #FF79CB;
+//$color_tertiary_variation: #59B144;
+//$color_tertiary_ter: #65AD81;
+//$color_tertiary_dark: #31621F;
+
+$color_black:#000000;
+$color_white:#ffffff;
+$color_grey: #AEAEAE;
+
+$color_font: #FFFFFF;
+
+$color_valid:#7ab51d;
+$color_error:#ce341a;
+
+$duration: .3s;
+$bezier: cubic-bezier(0.22, 1, 0.36, 1);
+
+
+@import "typography";

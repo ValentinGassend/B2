@@ -1,0 +1,232 @@
+.intro {
+    font-family: $ff_1;
+    .before {
+        &-svg {
+            //width: 100vw;
+            position: absolute;
+            &--path {
+                fill: none;
+                stroke: none;
+                //width: 100vw;
+                //stroke: $color_white;
+
+            }
+        }
+    }
+    .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        &-illustration {
+            position: absolute;
+            height: 67.3rem;
+            transform: translate(-50%,25%);
+            transition: transform 1s cubic-bezier(.17,.67,.5,1);
+            &.hide {
+                transform: translate(-100%,25%);
+
+            }
+        }
+        &-wrapperTitle {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        &-svg {
+            width: 60vw;
+            margin-bottom: 3.4rem;
+            overflow: unset;
+            &--path {
+                transform-origin: 25% 0px;
+                width: 100vw;
+                height: 100vh;
+                stroke: $color_white;
+                &.after_syndesi {
+                    stroke-width:5;
+                }
+                &.before_syndesi {
+                    stroke-width:1.7;
+                }
+            }
+        }
+        &-subtitle {
+            font-size: 4.8rem;
+            font-weight: 700;
+            line-height: 120%;
+        text-transform: uppercase;
+            transition: opacity 1s linear;
+            &.hide {
+                opacity: 0;
+            }
+        }
+        &-scroll {
+            margin-bottom: 6.7rem;
+            transition: opacity 1s linear;
+            height: 6.4rem;
+            animation: fly ease-in-out 2s infinite;
+            &.hide {
+                opacity: 0;
+            }
+        }
+    }
+    .name {
+        display: flex;
+        flex-direction: column;
+        &-content {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 2.4rem;
+        }
+        &-wrapperParagraph, &-wrapperInfo {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1.6rem;
+        }
+        &-title {
+            font-size: 2.4rem;
+            font-weight: 700;
+            line-height: 120%;
+        }
+        &-text{
+            font-family: $ff_2;
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 120%;
+            &.bold {
+                font-weight: 700;
+                padding: 0 31.6rem;
+            }
+        }
+        &-wrapperInfo {
+            gap: 4.8rem;
+        }
+        &-info {
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 120%;
+        }
+        &-input {
+            padding: 1.6rem;
+            text-align: center;
+            font-size: 3.2rem;
+            font-weight: 700;
+            line-height: 120%;
+            background-color: transparent;
+            border: 0.4rem solid $color_secondary;
+            color: $color_secondary;
+            transition: all 300ms linear;
+            &.validated {
+                border-color: $color_white;
+                color: $color_white;
+            }
+            &:focus-visible {
+                outline: none;
+            }
+            &::placeholder {
+                color: $color_secondary;
+            }
+            &--valid {
+                margin-left: 4rem;
+                width: 9rem;
+                padding: 1.6rem;
+                text-align: center;
+                font-size: 3.2rem;
+                font-weight: 700;
+                line-height: 120%;
+                background-color: transparent;
+                border: 0.4rem solid $color_secondary;
+                color: $color_secondary;
+                transition: all 1.5s linear;
+                &.validated {
+                    border-color: $color_white;
+                    color: $color_white;
+                }
+            }
+        }
+
+    }
+    .description {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+         &-wrapperParagraph {
+             margin: auto;
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: center;
+             text-align: center;
+             gap: 10.6rem;
+         }
+         &-title {
+             font-size: 2.4rem;
+             font-weight: 700;
+             line-height: 120%;
+             &.__Name {
+                 color: $color_secondary;
+             }
+         }
+        &-wrapperText {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 1.6rem;
+        }
+        &-text {
+            font-family: $ff_2;
+            font-size: 2rem;
+            font-weight: 300;
+            line-height: 120%;
+        }
+        &-column {
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 2.4rem;
+            &-illustration{
+                display: flex;
+                gap: 2.4rem;
+                img {
+                    height: 22.4rem;
+                    width: auto;
+                }
+            }
+            &-text {
+                &--hug {
+                    font-weight: 700;
+                    font-size: 4.8rem;
+                    line-height: 100%;
+                }
+                &--sub {
+                    font-weight: 600;
+                    font-size: 2.4rem;
+                    line-height: 120%;
+                }
+            }
+            &-illustration {
+
+            }
+        }
+        &-btn {
+            margin-bottom: 7.6rem;
+        }
+     }
+}
+

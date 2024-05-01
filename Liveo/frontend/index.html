@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Page App</title>
+    <link rel="stylesheet" href="/static/css/index.css">
+</head>
+<body>
+<div class="cursor">
+    <p class="cursor-scroll">scroll</p>
+    <p class="cursor-zoom">zoom</p>
+    <p class="cursor-affiche">?</p>
+</div>
+<div class="overlay">
+    <img src="/static/image/Syndesi.logo.svg" class="logo">
+    <div class="logo-title">experience 001</div>
+    <div class="info">
+        <span class="info-name"></span>
+        <span class="info-name--sub underline"></span>
+    </div>
+    <div class="progressBar">
+        <svg width="39" height="342" viewBox="0 0 39 342" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M2 307.203L21 338.686L37.5002 263.292L21 0.656982L6.50014 59.4807L2 307.203Z" fill="#20105C" stroke="#C52D48" stroke-width="2"/>
+            <defs>
+                <clipPath id="shape">
+            <path d="M2 307.203L21 338.686L37.5002 263.292L21 0.656982L6.50014 59.4807L2 307.203Z" fill="#20105C" stroke="#C52D48" stroke-width="2"/>
+                </clipPath>
+            </defs>
+        </svg>
+        <span class="progressBar-bg"></span>
+    </div>
+<!--    <div class="soundToogle">-->
+<!--&lt;!&ndash;        <img class="line-first" src="/static/image/line-third.svg">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="line-second" src="/static/image/line-third.svg">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="line-third" src="/static/image/line-third.svg">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="line-four" src="/static/image/line-third.svg">&ndash;&gt;-->
+<!--&lt;!&ndash;        <img class="line-five" src="/static/image/line-third.svg">&ndash;&gt;-->
+<!--    </div>-->
+</div>
+<div id="app"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.3/gsap.min.js"></script>
+<script
+        src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+        crossorigin="anonymous"></script>
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.5.1/mapbox-gl.css' rel='stylesheet' />
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+<script src="/static/js/scripts/mapbox.js" type="module"></script>
+<script src="/static/js/scripts/echarts.js" type="module"></script>
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+<script type="module" src="/static/js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+.endFrame {
+    &-illustration {
+        position: absolute;
+        right: 0;
+        display: block;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+    .congrate {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4.8rem;
+
+        &-title {
+            margin-top: 10%;
+            font-size: 4.8rem;
+            font-weight: 700;
+            line-height: 120%;
+            text-transform: uppercase;
+        }
+
+        &-paragraph {
+            font-size: 2rem;
+            font-weight: 300;
+            font-family: $ff_2;
+            line-height: 120%;
+            max-width: 88.4rem;
+        }
+    }
+
+    .thanks {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4.8rem;
+        &-title {
+            font-size: 4.8rem;
+            font-weight: 700;
+            line-height: 120%;
+            text-transform: uppercase;
+        }
+
+        &-wrapperParagraph {
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+
+        }
+        &-link {
+            color: $color_secondary;
+            text-decoration: none;
+            cursor: none;
+            font-family: $ff_2;
+            font-weight: 500;
+            font-size: 1.6rem;
+            line-height: 120%;
+            &:before {
+                content: '';
+                background-repeat: no-repeat;
+                background-size: contain;
+                height: 2.5em;
+                width: 3em;
+
+                display: inline-flex;
+                background-image: url('/static/image/download.svg');
+                align-items: center;
+            }
+        }
+        &-paragraph {
+            font-size: 2rem;
+            font-weight: 300;
+            font-family: $ff_2;
+            line-height: 120%;
+            max-width: 62rem;
+        }
+    }
+
+    .ending {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 4.8rem;
+        &-wrapperText {
+            margin-bottom: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 4.8rem;
+        }
+        &-column-illustration {
+            display: flex;
+            gap: 5.6rem;
+            flex-direction: row;
+            align-items: flex-end;
+            &-individual {
+                display: flex;
+                flex-direction: column;
+                gap: 3.2rem;
+                font-family: $ff_2;
+                font-weight: 500;
+                font-size: 1.6rem;
+                line-height: 120%;
+
+                &:nth-child(1) {
+                    img {
+                        animation: fly linear 7.5s infinite;
+                        max-height: 36rem;
+                    }
+                }
+                &:nth-child(2) {
+                    img {
+                        animation: fly linear 7.5s infinite 2.5s;
+                        max-height: 34rem;
+                    }
+                }
+                &:nth-child(3) {
+                    img {
+                        animation: fly linear 7.5s infinite 5s;
+                        max-height: 32rem;
+                    }
+                }
+
+                .name {
+                    text-transform: uppercase;
+                }
+            }
+        }
+        &-title {
+            font-size: 4.8rem;
+            font-weight: 700;
+            line-height: 120%;
+            text-transform: uppercase;
+        }
+
+        &-paragraph {
+            font-size: 2rem;
+            font-weight: 300;
+            font-family: $ff_2;
+            line-height: 120%;
+            max-width: 88.4rem;
+        }
+        &-footer {
+            position: absolute;
+            bottom: 6.6rem;
+            display: flex;
+            flex-direction: row;
+            gap: 7.6rem;
+            &--text {
+                font-size: 1.6rem;
+                font-weight: 700;
+                font-family: $ff_2;
+                line-height: 120%;
+
+            }
+            a {
+                 text-decoration: none;
+                 color: $color_white;
+             }
+        }
+    }
+}
